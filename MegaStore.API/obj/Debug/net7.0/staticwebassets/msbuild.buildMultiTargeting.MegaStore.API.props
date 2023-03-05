@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\MegaStore.API.props" />
+</Project>
