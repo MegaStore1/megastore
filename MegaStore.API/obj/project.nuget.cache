@@ -1,8 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "DeFOl9vP9LUIwF4NWcdZUlMi9mlIpzCHmUdofovb74PWb5+vNOFiPD//9SHuRpKkS/CDmKgWaXgjnmRgztdLXg==",
+  "dgSpecHash": "wwor66OYYBP5RlkvijNx7xVHdkjYx3eBGUhNQJQ3TgKY4qyLQu8bAQEHyTAS677YAui7NwonQO5jaP6o2NLiwg==",
   "success": true,
   "projectFilePath": "C:\\Users\\mdahee\\OneDrive - MIC Datenverarbeitung GmbH\\Desktop\\myprojects\\MegaStore\\MegaStore.API\\MegaStore.API.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\mdahee\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.3\\microsoft.aspnetcore.openapi.7.0.3.nupkg.sha512",
+    "C:\\Users\\mdahee\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\mdahee\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
+    "C:\\Users\\mdahee\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
+    "C:\\Users\\mdahee\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.4.0\\swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
+    "C:\\Users\\mdahee\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.4.0\\swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",
+    "C:\\Users\\mdahee\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.4.0\\swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512"
+  ],
   "logs": []
 }
