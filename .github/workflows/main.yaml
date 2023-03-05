@@ -17,5 +17,7 @@ jobs:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Install dependencies
         run: dotnet restore
+        working-directory: MegaStore.API
       - name: Build
         run: dotnet build --configuration Release --no-restore
+        working-directory: MegaStore.API
