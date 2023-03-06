@@ -15,8 +15,8 @@ namespace MegaStore.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public IAuthRepository repository { get; }
-        public IConfiguration configuration { get; }
+        private readonly IAuthRepository repository;
+        private readonly IConfiguration configuration;
         public AuthController(IAuthRepository repository, IConfiguration configuration)
         {
             this.configuration = configuration;

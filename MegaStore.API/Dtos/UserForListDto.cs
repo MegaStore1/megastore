@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MegaStore.API.Models
+namespace MegaStore.API.Dtos
 {
-    public class User
+    public class UserForListDto
     {
         public int Id { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
-        public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
 
-        public ICollection<Photo> Photos { get; set; }
+        public string PhotoUrl { get; set; }
     }
 }

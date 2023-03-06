@@ -9,7 +9,7 @@ namespace MegaStore.API.Data
 {
     public class AuthRepository : IAuthRepository
     {
-        public DataContext context { get; set; }
+        private readonly DataContext context;
 
         public AuthRepository(DataContext context)
         {
