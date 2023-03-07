@@ -6,3 +6,6 @@ node_modules
 MegaStore.API/Resources/Images
 # MegaStore.API/appsettings.json
 # MegaStore.API/appsettings.Development.json
+MegaStore.API/bin
+MegaStore.API/obj
+*.dll
