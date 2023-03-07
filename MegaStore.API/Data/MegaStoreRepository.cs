@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MegaStore.API.Helpers;
 using MegaStore.API.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,11 +34,27 @@ namespace MegaStore.API.Data
             return user;
         }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<PagedList<User>> GetUsers(UserParams userParams)
         {
-            var users = await this.context.Users.Include(p => p.Photos).ToListAsync();
+            var users = this.context.Users.Include(p => p.Photos).OrderByDescending(u => u.Id).AsQueryable();
 
-            return users;
+            if (!string.IsNullOrEmpty(userParams.email))
+                users = users.Where(u => u.Email == userParams.email);
+
+            if (!string.IsNullOrEmpty(userParams.orderBy))
+            {
+                switch (userParams.orderBy)
+                {
+                    case "username":
+                        users = users.OrderBy(u => u.Username);
+                        break;
+                    default:
+                        users = users.OrderByDescending(u => u.Id);
+                        break;
+                }
+            }
+
+            return await PagedList<User>.CreateAsync(users, userParams.pageNumber, userParams.pageSize);
         }
 
         public async Task<bool> SaveAll()

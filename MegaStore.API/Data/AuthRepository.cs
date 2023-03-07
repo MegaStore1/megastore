@@ -19,7 +19,7 @@ namespace MegaStore.API.Data
 
         public async Task<User> Login(string email, string password)
         {
-            var user = await this.context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            var user = await this.context.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.Email == email);
             if (user == null)
                 return null;
 

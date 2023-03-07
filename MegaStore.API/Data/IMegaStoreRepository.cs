@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MegaStore.API.Helpers;
 using MegaStore.API.Models;
 
 namespace MegaStore.API.Data
@@ -13,7 +14,7 @@ namespace MegaStore.API.Data
 
         Task<bool> SaveAll();
 
-        Task<IEnumerable<User>> GetUsers();
+        Task<PagedList<User>> GetUsers(UserParams userParams);
 
         Task<User> GetUser(int id);
     }
