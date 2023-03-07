@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MegaStore.API.Data;
 using MegaStore.API.Dtos;
+using MegaStore.API.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MegaStore.API.Controllers
 {
+    [ServiceFilter(typeof(LogUserActivity))]
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
