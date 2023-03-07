@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
+using AutoMapper;
 
 namespace MegaStore.API.Controllers
 {
@@ -15,12 +16,14 @@ namespace MegaStore.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public IAuthRepository repository { get; }
-        public IConfiguration configuration { get; }
-        public AuthController(IAuthRepository repository, IConfiguration configuration)
+        private readonly IAuthRepository repository;
+        private readonly IConfiguration configuration;
+        private readonly IMapper mapper;
+        public AuthController(IAuthRepository repository, IConfiguration configuration, IMapper mapper)
         {
             this.configuration = configuration;
             this.repository = repository;
+            this.mapper = mapper;
         }
 
 
@@ -74,9 +77,11 @@ namespace MegaStore.API.Controllers
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
+            var userToReturn = this.mapper.Map<UserForDetailsDto>(userFromRepo);
             return Ok(new
             {
-                token = tokenHandler.WriteToken(token)
+                token = tokenHandler.WriteToken(token),
+                userToReturn
             });
         }
     }
