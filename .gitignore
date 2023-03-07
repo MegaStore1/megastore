@@ -4,8 +4,5 @@
 *.db-wal
 node_modules
 MegaStore.API/Resources/Images
-MegaStore.API/bin
-MegaStore.API/obj
 # MegaStore.API/appsettings.json
 # MegaStore.API/appsettings.Development.json
-*.dll
