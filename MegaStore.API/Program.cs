@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,9 @@ builder.Services.AddDbContext<DataContext>(x => x.UseSqlite(builder.Configuratio
 
 // Adding CORS
 builder.Services.AddCors();
+
+// Add Mapper Service
+builder.Services.AddAutoMapper(typeof(Program));
 
 // Configure the services, We are not conserned about the order of services here. 
 // Add the repositories

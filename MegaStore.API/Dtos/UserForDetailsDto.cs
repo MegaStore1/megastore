@@ -6,13 +6,13 @@ using MegaStore.API.Models;
 
 namespace MegaStore.API.Dtos
 {
-    public class UserForDetailedDto
+    public class UserForDetailsDto
     {
         public int Id { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
 
         public string PhotoUrl { get; set; }
-        public ICollection<Photo> Photos { get; set; }
+        public ICollection<PhotosForDetailedDto> Photos { get; set; }
     }
 }
