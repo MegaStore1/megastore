@@ -7,11 +7,10 @@ using MegaStore.API.Models.Core;
 
 namespace MegaStore.API.Data.Core
 {
-    public interface ICoreRepository
+    public interface IModuleRepository : IBaseRepository
     {
+        Task<PagedList<Module>> GetModules(UserParams userParams);
 
-        Task<PagedList<Country>> GetCountries(UserParams userParams);
-
-        Task<Country> GetCountry(int id);
+        Task<Module> GetModule(int id);
     }
 }

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using MegaStore.API.Dtos;
+using MegaStore.API.Dtos.Core;
 using MegaStore.API.Models;
+using MegaStore.API.Models.Core;
 
 namespace MegaStore.API.Helpers
 {
@@ -17,6 +19,7 @@ namespace MegaStore.API.Helpers
                 {
                     opt.MapFrom(src => src.Photos.FirstOrDefault(p => p.IsMain).Url);
                 });
+
             CreateMap<User, UserForDetailsDto>()
                 .ForMember(dest => dest.PhotoUrl, opt =>
                 {
@@ -26,6 +29,12 @@ namespace MegaStore.API.Helpers
 
 
             CreateMap<UserForUpdateDto, User>();
+
+            CreateMap<Module, ModuleForListDto>();
+
+            CreateMap<Module, ModuleForDetailDto>();
+
+            CreateMap<ModuleForUpdateDto, Module>();
         }
     }
 }
