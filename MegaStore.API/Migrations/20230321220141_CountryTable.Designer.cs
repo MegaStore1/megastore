@@ -3,6 +3,7 @@ using System;
 using MegaStore.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MegaStore.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230321220141_CountryTable")]
+    partial class CountryTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -45,31 +48,6 @@ namespace MegaStore.API.Migrations
                     b.HasKey("id");
 
                     b.ToTable("mscCountry");
-                });
-
-            modelBuilder.Entity("MegaStore.API.Models.Core.Module", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("mscmId");
-
-                    b.Property<DateTime>("createdAt")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("mscmCreateAt");
-
-                    b.Property<string>("modulueName")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("mscmModuleName");
-
-                    b.Property<bool>("status")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("mscmStatus");
-
-                    b.HasKey("id");
-
-                    b.ToTable("mscModule");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.Photo", b =>
