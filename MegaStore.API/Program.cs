@@ -38,6 +38,9 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IMegaStoreRepository, MegaStoreRepository>();
 builder.Services.AddScoped<IModuleRepository, ModuleRepository>();
 
+// Add Seeds
+builder.Services.AddScoped<Seed>();
+
 // Add Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -54,6 +57,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddScoped<LogUserActivity>();
 
 var app = builder.Build();
+
+// Get Seeds
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -80,6 +86,8 @@ else
         });
     });
 }
+
+Seed.SeedCountries(app);
 
 // app.UseHttpsRedirection();
 app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());

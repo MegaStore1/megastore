@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using MegaStore.API.Models.Core;
 
 namespace MegaStore.API.Models
 {
-    public class User
+    [Table("msuUser")]
+    public class User : Base
     {
         public int Id { get; set; }
         public string Username { get; set; }
