@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MegaStore.API.Models.Core
+namespace MegaStore.API.Dtos.Core.Country
 {
-    [Table("mscCountry")]
-    public class Country : Base
+    public class CountryForDetailsDto
     {
         public int id { get; set; }
 
@@ -15,6 +13,6 @@ namespace MegaStore.API.Models.Core
 
         public String countryCode { get; set; }
 
-        public ICollection<State>? States { get; set; }
+        public ICollection<StateDto>? States { get; set; }
     }
 }

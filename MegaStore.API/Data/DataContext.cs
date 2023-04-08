@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MegaStore.API.Models;
 using MegaStore.API.Models.Core;
+using MegaStore.API.Models.Core.CountryModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace MegaStore.API.Data
