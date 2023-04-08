@@ -8,25 +8,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MegaStore.API.Data.Core
 {
-    public class ModuleRepository : IModuleRepository
+    public class ModuleRepository : BaseRepository, IModuleRepository
     {
 
         private readonly DataContext context;
 
-        public ModuleRepository(DataContext context)
+        public ModuleRepository(DataContext context) : base(context)
         {
             this.context = context;
-        }
-
-
-        public void Add<T>(T entity) where T : class
-        {
-            this.context.Add(entity);
-        }
-
-        public void Delete<T>(T entity) where T : class
-        {
-            this.context.Remove(entity);
         }
 
         public async Task<Module> GetModule(int id)
@@ -39,11 +28,6 @@ namespace MegaStore.API.Data.Core
         {
             var modules = this.context.Modules.AsQueryable();
             return await PagedList<Module>.CreateAsync(modules, userParams.pageNumber, userParams.pageSize);
-        }
-
-        public async Task<bool> SaveAll()
-        {
-            return await this.context.SaveChangesAsync() > 0;
         }
     }
 }
