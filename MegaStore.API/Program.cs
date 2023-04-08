@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using AutoMapper;
 using MegaStore.API.Data.Core;
+using MegaStore.API.Data.Core.CountryModule;
 
 var builder = WebApplication.CreateBuilder(args);
 

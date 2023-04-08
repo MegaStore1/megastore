@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using MegaStore.API.Models.Core;
+using MegaStore.API.Models.Core.CountryModel;
 using Newtonsoft.Json;
 
-namespace MegaStore.API.Data.Core
+namespace MegaStore.API.Data.Core.CountryModule
 {
     public class Seed
     {
@@ -17,10 +17,10 @@ namespace MegaStore.API.Data.Core
             {
                 using var scope = app.Services.CreateScope();
                 DataContext context = scope.ServiceProvider.GetRequiredService<DataContext>();
-                var countryData = System.IO.File.ReadAllText("Data/Core/countries.json");
+                var countryData = System.IO.File.ReadAllText("Data/Core/CountryModule/countries.json");
                 var countries = JsonConvert.DeserializeObject<List<Country>>(countryData);
 
-                var stateData = System.IO.File.ReadAllText("Data/Core/states.json");
+                var stateData = System.IO.File.ReadAllText("Data/Core/CountryModule/states.json");
                 var allStates = JsonConvert.DeserializeObject<List<State>>(stateData);
 
                 foreach (var country in countries)
