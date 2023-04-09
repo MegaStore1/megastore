@@ -18,13 +18,13 @@ namespace MegaStore.API.Data.Core.CountryModule
 
         public async Task<PagedList<Country>> GetCountries(UserParams userParams)
         {
-            var countries = this.context.Countries.AsQueryable();
+            var countries = this.context.Countries.AsQueryable().OrderBy(c => c.countryName);
             return await PagedList<Country>.CreateAsync(countries, userParams.pageNumber, userParams.pageSize);
         }
 
         public async Task<Country> GetCountry(int id)
         {
-            var country = await this.context.Countries.Include(s => s.States).FirstOrDefaultAsync(x => x.id == id);
+            var country = await this.context.Countries.Include(s => s.States.OrderBy(s => s.stateName)).FirstOrDefaultAsync(x => x.id == id);
             return country;
         }
     }

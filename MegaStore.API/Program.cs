@@ -38,6 +38,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IMegaStoreRepository, MegaStoreRepository>();
 builder.Services.AddScoped<IModuleRepository, ModuleRepository>();
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 
 // Add Seeds
 builder.Services.AddScoped<Seed>();
