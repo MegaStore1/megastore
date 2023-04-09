@@ -9,9 +9,5 @@ namespace MegaStore.API.Data.Core
 {
     public interface ICoreRepository
     {
-
-        Task<PagedList<Country>> GetCountries(UserParams userParams);
-
-        Task<Country> GetCountry(int id);
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using AutoMapper;
 using MegaStore.API.Data.Core;
+using MegaStore.API.Data.Core.CountryModule;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IMegaStoreRepository, MegaStoreRepository>();
 builder.Services.AddScoped<IModuleRepository, ModuleRepository>();
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 
 // Add Seeds
 builder.Services.AddScoped<Seed>();

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MegaStore.API.Models.Core
+namespace MegaStore.API.Models.Core.CountryModel
 {
     [Table("mscState")]
     public class State : Base
