@@ -9,3 +9,5 @@ MegaStore.API/Resources/Images
 MegaStore.API/bin
 MegaStore.API/obj
 *.dll
+*.db
+.DS_Store
