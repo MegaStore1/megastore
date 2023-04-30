@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using AutoMapper;
 using MegaStore.API.Data.Core;
 using MegaStore.API.Data.Core.CountryModule;
+using MegaStore.API.Data.Core.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,7 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IMegaStoreRepository, MegaStoreRepository>();
 builder.Services.AddScoped<IModuleRepository, ModuleRepository>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<IUserRoles, UserRoles>();
 
 // Add Seeds
 builder.Services.AddScoped<Seed>();
@@ -89,7 +91,7 @@ else
     });
 }
 
-Seed.SeedCountries(app);
+// Seed.SeedCountries(app);
 
 // app.UseHttpsRedirection();
 app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());

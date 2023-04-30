@@ -10,7 +10,9 @@ namespace MegaStore.API.Data.Core
     public interface IModuleRepository : IBaseRepository
     {
         Task<PagedList<Module>> GetModules(UserParams userParams);
-
+        Task<bool> ModuleExists(string moduleName);
         Task<Module> GetModule(int id);
+        Task<ICollection<ModulePage>> GetPages(UserParams userParams);
+        Task<ModulePage> GetPage(int id);
     }
 }

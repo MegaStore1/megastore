@@ -42,7 +42,7 @@ namespace MegaStore.API.Controllers
             };
 
             var createdUser = await this.repository.Register(userToCreate, userForRegisterDto.Password);
-
+            // Nothing, just to test commit.
             return StatusCode(201);
         }
 

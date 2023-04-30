@@ -37,7 +37,6 @@ namespace MegaStore.API.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     moduleName = table.Column<string>(type: "TEXT", nullable: false),
                     status = table.Column<bool>(type: "INTEGER", nullable: false),
-                    createdAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     creationUserId = table.Column<int>(type: "INTEGER", nullable: false),
                     creationDate = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
                     updateUserId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -94,6 +93,30 @@ namespace MegaStore.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "mscModulePage",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    pageName = table.Column<string>(type: "TEXT", nullable: false),
+                    moduleId = table.Column<int>(type: "INTEGER", nullable: false),
+                    creationUserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    creationDate = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    updateUserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    updateDate = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mscModulePage", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_mscModulePage_mscModule_moduleId",
+                        column: x => x.moduleId,
+                        principalTable: "mscModule",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "msuPhoto",
                 columns: table => new
                 {
@@ -119,10 +142,44 @@ namespace MegaStore.API.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "mssUserRoles",
+                columns: table => new
+                {
+                    userId = table.Column<int>(type: "INTEGER", nullable: false),
+                    pageId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_mssUserRoles", x => new { x.pageId, x.userId });
+                    table.ForeignKey(
+                        name: "FK_mssUserRoles_mscModulePage_pageId",
+                        column: x => x.pageId,
+                        principalTable: "mscModulePage",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_mssUserRoles_msuUser_userId",
+                        column: x => x.userId,
+                        principalTable: "msuUser",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mscModulePage_moduleId",
+                table: "mscModulePage",
+                column: "moduleId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_mscState_countryId",
                 table: "mscState",
                 column: "countryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_mssUserRoles_userId",
+                table: "mssUserRoles",
+                column: "userId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_msuPhoto_UserId",
@@ -134,10 +191,10 @@ namespace MegaStore.API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "mscModule");
+                name: "mscState");
 
             migrationBuilder.DropTable(
-                name: "mscState");
+                name: "mssUserRoles");
 
             migrationBuilder.DropTable(
                 name: "msuPhoto");
@@ -146,7 +203,13 @@ namespace MegaStore.API.Migrations
                 name: "mscCountry");
 
             migrationBuilder.DropTable(
+                name: "mscModulePage");
+
+            migrationBuilder.DropTable(
                 name: "msuUser");
+
+            migrationBuilder.DropTable(
+                name: "mscModule");
         }
     }
 }

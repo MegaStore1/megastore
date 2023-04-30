@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -23,6 +25,13 @@ namespace MegaStore.API.Helpers
             camelCaseFormatter.ContractResolver = new CamelCasePropertyNamesContractResolver();
             response.Headers.Add("Pagination", JsonConvert.SerializeObject(paginationHeader, camelCaseFormatter));
             response.Headers.Add("Access-Control-Expose-Headers", "Pagination");
+        }
+
+        public static async void ErrorResponse(this HttpResponse response, string message)
+        {
+            response.StatusCode = 400;
+            var bytes = Encoding.UTF8.GetBytes(message);
+            await response.Body.WriteAsync(bytes);
         }
 
 
