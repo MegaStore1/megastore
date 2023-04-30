@@ -3,6 +3,7 @@ using System;
 using MegaStore.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MegaStore.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230430132629_StatePlantAdded")]
+    partial class StatePlantAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -240,7 +243,10 @@ namespace MegaStore.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("companyId")
+                    b.Property<int>("companyid")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("compnayId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("creationDate")
@@ -264,9 +270,6 @@ namespace MegaStore.API.Migrations
                     b.Property<int>("stateId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("status")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("updateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
@@ -277,7 +280,7 @@ namespace MegaStore.API.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("companyId");
+                    b.HasIndex("companyid");
 
                     b.HasIndex("stateId");
 
@@ -379,7 +382,7 @@ namespace MegaStore.API.Migrations
                 {
                     b.HasOne("MegaStore.API.Models.Settings.Company.Company", "company")
                         .WithMany("plants")
-                        .HasForeignKey("companyId")
+                        .HasForeignKey("companyid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

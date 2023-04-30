@@ -27,5 +27,11 @@ namespace MegaStore.API.Data.Core.CountryModule
             var country = await this.context.Countries.Include(s => s.States.OrderBy(s => s.stateName)).FirstOrDefaultAsync(x => x.id == id);
             return country;
         }
+
+        public async Task<State> GetState(int id)
+        {
+            var state = await this.context.States.FirstOrDefaultAsync(s => s.id == id);
+            return state;
+        }
     }
 }

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using MegaStore.API.Dtos.Core.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -11,6 +13,7 @@ namespace MegaStore.API.Helpers
 {
     public static class Extensions
     {
+        public static Session session;
         public static void AddApplicationError(this HttpResponse response, string message)
         {
             response.Headers.Add("Application-Error", message);
@@ -43,6 +46,15 @@ namespace MegaStore.API.Helpers
                 age--;
 
             return age;
+        }
+
+        public static Session GetSessionDetails(ControllerBase controller)
+        {
+            int id = int.Parse(controller.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            session = new Session();
+            session.id = id;
+            return session;
         }
     }
 }
