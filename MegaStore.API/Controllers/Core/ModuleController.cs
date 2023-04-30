@@ -7,6 +7,7 @@ using AutoMapper;
 using MegaStore.API.Data.Core;
 using MegaStore.API.Dtos.Core;
 using MegaStore.API.Helpers;
+using MegaStore.API.Models.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,6 +38,30 @@ namespace MegaStore.API.Controllers.Core
             return Ok(modulesToReturn);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddModule(ModuleForUpdateDto moduleDto)
+        {
+            int id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            // Check if module exists
+            if (await this.repository.ModuleExists(moduleDto.moduleName))
+                return BadRequest($"Module {moduleDto.moduleName} already exists");
+            var moduleToCreate = this.mapper.Map<Module>(moduleDto);
+            moduleToCreate.creationUserId = id;
+            moduleToCreate.updateUserId = id;
+            this.repository.Add<Module>(moduleToCreate);
+            await this.repository.SaveAll();
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteModule(int id)
+        {
+            var moduleToDelete = await this.repository.GetModule(id);
+            this.repository.Delete(moduleToDelete);
+            await this.repository.SaveAll();
+            return NoContent();
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetModule(int id)
         {
@@ -63,5 +88,22 @@ namespace MegaStore.API.Controllers.Core
             return BadRequest(response);
         }
 
+
+        [HttpPost("addPage")]
+        public async Task<IActionResult> AddPage(ModulePageForUpdateDto modulePageDto)
+        {
+            int id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var module = await this.repository.GetModule(modulePageDto.moduleId);
+
+            if (null == module)
+                return BadRequest("Module doesn't exist");
+
+            var pageToCreate = this.mapper.Map<ModulePage>(modulePageDto);
+            pageToCreate.creationUserId = id;
+            pageToCreate.updateUserId = id;
+            this.repository.Add<ModulePage>(pageToCreate);
+            await this.repository.SaveAll();
+            return NoContent();
+        }
     }
 }

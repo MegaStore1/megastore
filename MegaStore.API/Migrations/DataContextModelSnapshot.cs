@@ -17,7 +17,7 @@ namespace MegaStore.API.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
 
-            modelBuilder.Entity("MegaStore.API.Models.Core.Country", b =>
+            modelBuilder.Entity("MegaStore.API.Models.Core.CountryModel.Country", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -52,44 +52,7 @@ namespace MegaStore.API.Migrations
                     b.ToTable("mscCountry");
                 });
 
-            modelBuilder.Entity("MegaStore.API.Models.Core.Module", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("createdAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("creationDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("creationUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("moduleName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("status")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("updateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("updateUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("id");
-
-                    b.ToTable("mscModule");
-                });
-
-            modelBuilder.Entity("MegaStore.API.Models.Core.State", b =>
+            modelBuilder.Entity("MegaStore.API.Models.Core.CountryModel.State", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -127,6 +90,76 @@ namespace MegaStore.API.Migrations
                     b.HasIndex("countryId");
 
                     b.ToTable("mscState");
+                });
+
+            modelBuilder.Entity("MegaStore.API.Models.Core.Module", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("creationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<int>("creationUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("moduleName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("updateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<int>("updateUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("id");
+
+                    b.ToTable("mscModule");
+                });
+
+            modelBuilder.Entity("MegaStore.API.Models.Core.ModulePage", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("creationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<int>("creationUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("moduleId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("pageName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("updateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<int>("updateUserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("moduleId");
+
+                    b.ToTable("mscModulePage");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.Photo", b =>
@@ -168,6 +201,21 @@ namespace MegaStore.API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("msuPhoto");
+                });
+
+            modelBuilder.Entity("MegaStore.API.Models.Shared.UserRoles", b =>
+                {
+                    b.Property<int>("pageId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("userId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("pageId", "userId");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("mssUserRoles");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.User", b =>
@@ -213,15 +261,26 @@ namespace MegaStore.API.Migrations
                     b.ToTable("msuUser");
                 });
 
-            modelBuilder.Entity("MegaStore.API.Models.Core.State", b =>
+            modelBuilder.Entity("MegaStore.API.Models.Core.CountryModel.State", b =>
                 {
-                    b.HasOne("MegaStore.API.Models.Core.Country", "country")
+                    b.HasOne("MegaStore.API.Models.Core.CountryModel.Country", "country")
                         .WithMany("States")
                         .HasForeignKey("countryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("country");
+                });
+
+            modelBuilder.Entity("MegaStore.API.Models.Core.ModulePage", b =>
+                {
+                    b.HasOne("MegaStore.API.Models.Core.Module", "module")
+                        .WithMany("pages")
+                        .HasForeignKey("moduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("module");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.Photo", b =>
@@ -235,9 +294,33 @@ namespace MegaStore.API.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MegaStore.API.Models.Core.Country", b =>
+            modelBuilder.Entity("MegaStore.API.Models.Shared.UserRoles", b =>
+                {
+                    b.HasOne("MegaStore.API.Models.Core.ModulePage", "page")
+                        .WithMany()
+                        .HasForeignKey("pageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MegaStore.API.Models.User", "user")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("page");
+
+                    b.Navigation("user");
+                });
+
+            modelBuilder.Entity("MegaStore.API.Models.Core.CountryModel.Country", b =>
                 {
                     b.Navigation("States");
+                });
+
+            modelBuilder.Entity("MegaStore.API.Models.Core.Module", b =>
+                {
+                    b.Navigation("pages");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.User", b =>

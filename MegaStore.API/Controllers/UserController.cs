@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using MegaStore.API.Data;
+using MegaStore.API.Data.Core;
+using MegaStore.API.Data.Core.Shared;
 using MegaStore.API.Dtos;
+using MegaStore.API.Dtos.User;
 using MegaStore.API.Helpers;
+using MegaStore.API.Models.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,11 +24,22 @@ namespace MegaStore.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IMegaStoreRepository repository;
+        private readonly IModuleRepository moduleRepository;
         private readonly IMapper mapper;
-        public UserController(IMegaStoreRepository repository, IMapper mapper)
+        private readonly IUserRoles userRoles;
+        private readonly IMegaStoreRepository userRepository;
+
+        public UserController(IMegaStoreRepository repository,
+                                IModuleRepository moduleRepository,
+                                IMapper mapper,
+                                IUserRoles userRoles,
+                                IMegaStoreRepository userRepository)
         {
             this.repository = repository;
             this.mapper = mapper;
+            this.userRoles = userRoles;
+            this.userRepository = userRepository;
+            this.moduleRepository = moduleRepository;
         }
 
         [HttpGet]
@@ -69,6 +85,55 @@ namespace MegaStore.API.Controllers
             response.StatusCode = ResponseCode.FAILURE;
             response.Message = "Failed to update";
             return BadRequest(response);
+        }
+
+        [HttpPost("grantPages")]
+        public async Task<IActionResult> GrantPage(PagesForGrantDto pagesForGrantDto)
+        {
+            var user = await this.userRepository.GetUser(pagesForGrantDto.UserId);
+
+            if (user == null)
+            {
+                return BadRequest($"User with the id {pagesForGrantDto.UserId} does not exists");
+            }
+            else
+            {
+                // Check if user already has the roles.
+                foreach (int id in pagesForGrantDto.pagesId)
+                {
+                    if (user.pages.Any(p => p.id == id)) return BadRequest($"User already has the roles for the page {id}");
+                }
+
+            }
+
+
+            ICollection<MegaStore.API.Models.Shared.UserRoles> roles = new Collection<MegaStore.API.Models.Shared.UserRoles>();
+            foreach (int id in pagesForGrantDto.pagesId)
+            {
+                var page = await this.moduleRepository.GetPage(id);
+                if (page == null) return BadRequest($"Page does not exists with the id {id}");
+                MegaStore.API.Models.Shared.UserRoles role = new MegaStore.API.Models.Shared.UserRoles();
+                role.userId = pagesForGrantDto.UserId;
+                role.pageId = id;
+                roles.Add(role);
+            }
+
+            foreach (MegaStore.API.Models.Shared.UserRoles role in roles)
+            {
+                this.userRoles.Add(role);
+            }
+
+            await this.userRoles.SaveAll();
+            return NoContent();
+        }
+
+        [HttpDelete("refusePage/{userId}/{pageId}")]
+        public async Task<IActionResult> RefusePage(int userId, int pageId)
+        {
+            var moduleToDelete = await this.userRoles.GetRole(userId, pageId);
+            this.userRoles.Delete(moduleToDelete);
+            await this.userRoles.SaveAll();
+            return NoContent();
         }
     }
 }

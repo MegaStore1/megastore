@@ -20,7 +20,7 @@ namespace MegaStore.API.Data.Core
 
         public async Task<Module> GetModule(int id)
         {
-            var module = await this.context.Modules.FirstOrDefaultAsync(x => x.id == id);
+            var module = await this.context.Modules.Include(m => m.pages.OrderBy(p => p.creationDate)).FirstOrDefaultAsync(x => x.id == id);
             return module;
         }
 
@@ -28,6 +28,23 @@ namespace MegaStore.API.Data.Core
         {
             var modules = this.context.Modules.AsQueryable();
             return await PagedList<Module>.CreateAsync(modules, userParams.pageNumber, userParams.pageSize);
+        }
+
+        public async Task<ModulePage> GetPage(int id)
+        {
+            var page = await this.context.ModulePages.Include(m => m.module).FirstOrDefaultAsync(p => p.id == id);
+            return page;
+        }
+
+        public async Task<ICollection<ModulePage>> GetPages(UserParams userParams)
+        {
+            var page = await this.context.ModulePages.Include(m => m.module).ToListAsync();
+            return page;
+        }
+
+        public async Task<bool> ModuleExists(string moduleName)
+        {
+            return await this.context.Modules.AnyAsync(m => m.moduleName == moduleName);
         }
     }
 }

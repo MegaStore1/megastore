@@ -17,5 +17,6 @@ namespace MegaStore.API.Models
         public byte[] PasswordSalt { get; set; }
 
         public ICollection<Photo> Photos { get; set; }
+        public ICollection<ModulePage> pages { get; set; }
     }
 }

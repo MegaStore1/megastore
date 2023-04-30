@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MegaStore.API.Dtos.Core.Shared;
 using MegaStore.API.Models;
 
 namespace MegaStore.API.Dtos
@@ -14,5 +15,6 @@ namespace MegaStore.API.Dtos
 
         public string PhotoUrl { get; set; }
         public ICollection<PhotosForDetailedDto> Photos { get; set; }
+        public ICollection<ModulePageDto> Pages { get; set; }
     }
 }

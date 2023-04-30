@@ -10,6 +10,6 @@ namespace MegaStore.API.Dtos.Core
         public int id { get; set; }
         public string moduleName { get; set; }
         public bool status { get; set; }
-        public DateTime createdAt { get; set; }
+        public DateTime creationDate { get; set; }
     }
 }

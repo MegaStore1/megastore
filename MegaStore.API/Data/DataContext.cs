@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MegaStore.API.Models;
 using MegaStore.API.Models.Core;
 using MegaStore.API.Models.Core.CountryModel;
+using MegaStore.API.Models.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace MegaStore.API.Data
@@ -18,6 +19,8 @@ namespace MegaStore.API.Data
         public DbSet<Country> Countries { get; set; }
         public DbSet<Module> Modules { get; set; }
         public DbSet<State> States { get; set; }
+        public DbSet<ModulePage> ModulePages { get; set; }
+        public DbSet<UserRoles> UserRoles { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,6 +32,15 @@ namespace MegaStore.API.Data
             modelBuilder.Entity<User>()
                     .Property(b => b.updateDate)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<UserRoles>(userRole =>
+            {
+                userRole.HasKey(ur => new { ur.pageId, ur.userId });
+            });
+
+            modelBuilder.Entity<User>()
+                .HasMany(e => e.pages)
+                .WithMany(e => e.users)
+                .UsingEntity<UserRoles>();
 
 
             modelBuilder.Entity<Photo>()
@@ -62,6 +74,13 @@ namespace MegaStore.API.Data
             modelBuilder.Entity<State>()
                     .Property(b => b.updateDate)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<ModulePage>()
+                            .Property(b => b.creationDate)
+                            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<ModulePage>()
+                .Property(b => b.updateDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
         }
 
     }
