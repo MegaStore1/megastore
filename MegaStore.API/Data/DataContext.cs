@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MegaStore.API.Models;
 using MegaStore.API.Models.Core;
 using MegaStore.API.Models.Core.CountryModel;
+using MegaStore.API.Models.Settings.Company;
 using MegaStore.API.Models.Shared;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,9 @@ namespace MegaStore.API.Data
         public DbSet<State> States { get; set; }
         public DbSet<ModulePage> ModulePages { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; }
+
+        public DbSet<Company> Companies { get; set; }
+        public DbSet<Plant> Plants { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -81,6 +85,21 @@ namespace MegaStore.API.Data
             modelBuilder.Entity<ModulePage>()
                 .Property(b => b.updateDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<Company>()
+                .Property(o => o.creationDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<Company>()
+            .Property(o => o.updateDate)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<Plant>()
+                .Property(o => o.creationDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<Plant>()
+            .Property(o => o.updateDate)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
         }
 
     }

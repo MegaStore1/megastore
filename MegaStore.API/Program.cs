@@ -10,6 +10,7 @@ using AutoMapper;
 using MegaStore.API.Data.Core;
 using MegaStore.API.Data.Core.CountryModule;
 using MegaStore.API.Data.Core.Shared;
+using MegaStore.API.Data.Settings.CompanyRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,7 @@ builder.Services.AddScoped<IMegaStoreRepository, MegaStoreRepository>();
 builder.Services.AddScoped<IModuleRepository, ModuleRepository>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 builder.Services.AddScoped<IUserRoles, UserRoles>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 
 // Add Seeds
 builder.Services.AddScoped<Seed>();

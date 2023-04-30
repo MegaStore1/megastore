@@ -3,6 +3,7 @@ using System;
 using MegaStore.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MegaStore.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230430132255_CompanyPlantsAdded")]
+    partial class CompanyPlantsAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -240,7 +243,10 @@ namespace MegaStore.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("companyId")
+                    b.Property<int>("companyid")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("compnayId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("creationDate")
@@ -261,9 +267,6 @@ namespace MegaStore.API.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("stateId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("updateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
@@ -274,9 +277,7 @@ namespace MegaStore.API.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("companyId");
-
-                    b.HasIndex("stateId");
+                    b.HasIndex("companyid");
 
                     b.ToTable("msstPlant");
                 });
@@ -376,19 +377,11 @@ namespace MegaStore.API.Migrations
                 {
                     b.HasOne("MegaStore.API.Models.Settings.Company.Company", "company")
                         .WithMany("plants")
-                        .HasForeignKey("companyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MegaStore.API.Models.Core.CountryModel.State", "state")
-                        .WithMany("plants")
-                        .HasForeignKey("stateId")
+                        .HasForeignKey("companyid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("company");
-
-                    b.Navigation("state");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.Shared.UserRoles", b =>
@@ -413,11 +406,6 @@ namespace MegaStore.API.Migrations
             modelBuilder.Entity("MegaStore.API.Models.Core.CountryModel.Country", b =>
                 {
                     b.Navigation("States");
-                });
-
-            modelBuilder.Entity("MegaStore.API.Models.Core.CountryModel.State", b =>
-                {
-                    b.Navigation("plants");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.Core.Module", b =>
