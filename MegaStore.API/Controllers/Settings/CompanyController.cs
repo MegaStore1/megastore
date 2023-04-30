@@ -54,5 +54,26 @@ namespace MegaStore.API.Controllers.Settings
             await this.repository.SaveAll();
             return NoContent();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCompanies([FromQuery] UserParams userParams)
+        {
+            var companies = await this.repository.GetCompanies(userParams);
+            var companiesToReturn = this.mapper.Map<IEnumerable<CompanyForListDto>>(companies);
+
+            Response.AddPagintaion(companies.currentPage, companies.pageSize, companies.totalCount, companies.totalPages);
+
+            return Ok(companiesToReturn);
+        }
+
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCompany(int id)
+        {
+            var company = await this.repository.GetCompany(id);
+            var companyToReturn = this.mapper.Map<CompanyForDetailedDto>(company);
+
+            return Ok(companyToReturn);
+        }
     }
 }

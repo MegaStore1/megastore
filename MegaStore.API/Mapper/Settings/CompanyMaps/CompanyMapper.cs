@@ -14,6 +14,12 @@ namespace MegaStore.API.Mapper.Settings.CompanyMaps
         {
             CreateMap<CompanyForRegisterDto, Company>();
             CreateMap<PlantForRegisterDto, Plant>();
+
+            CreateMap<Company, CompanyForListDto>();
+            CreateMap<Company, CompanyForDetailedDto>();
+
+            CreateMap<Plant, PlantForListDto>();
+            CreateMap<Plant, PlantForDetailsDto>();
         }
     }
 }
