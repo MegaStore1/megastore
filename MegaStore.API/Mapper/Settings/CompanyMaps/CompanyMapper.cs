@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MegaStore.API.Dtos.Core.Shared;
 using MegaStore.API.Dtos.Settings.Company;
 using MegaStore.API.Models.Settings.Company;
 
@@ -20,6 +21,9 @@ namespace MegaStore.API.Mapper.Settings.CompanyMaps
 
             CreateMap<Plant, PlantForListDto>();
             CreateMap<Plant, PlantForDetailsDto>();
+
+            CreateMap<SinglePlantForRegisterDto, Plant>();
+            CreateMap<StatusDto, Plant>();
         }
     }
 }

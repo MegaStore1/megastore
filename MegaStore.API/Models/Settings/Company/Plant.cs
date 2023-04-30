@@ -21,5 +21,6 @@ namespace MegaStore.API.Models.Settings.Company
 
         public int companyId { get; set; }
         public Company company { get; set; }
+        public bool status { get; set; }
     }
 }

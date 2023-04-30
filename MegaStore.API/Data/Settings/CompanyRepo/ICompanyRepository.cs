@@ -13,5 +13,6 @@ namespace MegaStore.API.Data.Settings.CompanyRepo
         Task<PagedList<Company>> GetCompanies(UserParams userParams);
         Task<Company> GetCompany(int id);
         Task<bool> CompanyExists(string companyName);
+        Task<Plant> GetPlant(int id);
     }
 }

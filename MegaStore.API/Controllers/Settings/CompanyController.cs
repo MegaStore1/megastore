@@ -4,7 +4,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
+using MegaStore.API.Data.Core.CountryModule;
 using MegaStore.API.Data.Settings.CompanyRepo;
+using MegaStore.API.Dtos.Core.Shared;
 using MegaStore.API.Dtos.Settings.Company;
 using MegaStore.API.Helpers;
 using MegaStore.API.Models.Settings.Company;
@@ -21,18 +23,20 @@ namespace MegaStore.API.Controllers.Settings
     {
         private readonly ICompanyRepository repository;
         private readonly IMapper mapper;
+        private readonly ICountryRepository countryRepository;
 
-        public CompanyController(ICompanyRepository repository, IMapper mapper)
+        public CompanyController(ICompanyRepository repository, IMapper mapper, ICountryRepository countryRepository)
         {
             this.repository = repository;
             this.mapper = mapper;
+            this.countryRepository = countryRepository;
         }
 
 
         [HttpPost("registerCompany")]
         public async Task<IActionResult> RegisterCompany(CompanyForRegisterDto companyDto)
         {
-            int id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            int id = Extensions.GetSessionDetails(this).id;
 
             // Check if company exists
             if (await this.repository.CompanyExists(companyDto.companyName))
@@ -75,5 +79,50 @@ namespace MegaStore.API.Controllers.Settings
 
             return Ok(companyToReturn);
         }
+
+        [HttpPost("registerPlant")]
+        public async Task<IActionResult> RegisterPlant(SinglePlantForRegisterDto plantDto)
+        {
+            int id = Extensions.GetSessionDetails(this).id;
+            var company = await this.repository.GetCompany(plantDto.companyId);
+
+            if (null == company)
+                return BadRequest($"Company with the id {plantDto.companyId} does not exists");
+
+            var state = await this.countryRepository.GetState(plantDto.stateId);
+
+            if (null == state)
+                return BadRequest($"State with the id {plantDto.stateId} does not exists");
+
+            var plantToCreate = this.mapper.Map<Plant>(plantDto);
+            plantToCreate.creationUserId = id;
+            plantToCreate.updateUserId = id;
+
+            this.repository.Add<Plant>(plantToCreate);
+            await this.repository.SaveAll();
+            return NoContent();
+        }
+
+        [HttpPut("activeDeactivePlant/{id}")]
+        public async Task<IActionResult> ActiveDeactivePlant(int id, StatusDto statusDto)
+        {
+            int userId = Extensions.GetSessionDetails(this).id;
+
+            var plantFromRepo = await this.repository.GetPlant(id);
+
+            if (null == plantFromRepo) return BadRequest($"Plant with the id {id} does not exits");
+
+            plantFromRepo.updateUserId = userId;
+            this.mapper.Map(statusDto, plantFromRepo);
+
+            if (await this.repository.SaveAll())
+                return NoContent();
+
+            var response = new Response();
+            response.StatusCode = ResponseCode.FAILURE;
+            response.Message = "Failed to update";
+            return BadRequest(response);
+        }
+
     }
 }

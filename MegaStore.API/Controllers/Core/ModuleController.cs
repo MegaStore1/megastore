@@ -41,7 +41,7 @@ namespace MegaStore.API.Controllers.Core
         [HttpPost]
         public async Task<IActionResult> AddModule(ModuleForUpdateDto moduleDto)
         {
-            int id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            int id = Extensions.GetSessionDetails(this).id;
             // Check if module exists
             if (await this.repository.ModuleExists(moduleDto.moduleName))
                 return BadRequest($"Module {moduleDto.moduleName} already exists");
@@ -92,7 +92,7 @@ namespace MegaStore.API.Controllers.Core
         [HttpPost("addPage")]
         public async Task<IActionResult> AddPage(ModulePageForUpdateDto modulePageDto)
         {
-            int id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            int id = Extensions.GetSessionDetails(this).id;
             var module = await this.repository.GetModule(modulePageDto.moduleId);
 
             if (null == module)

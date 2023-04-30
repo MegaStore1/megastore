@@ -13,5 +13,7 @@ namespace MegaStore.API.Data.Core.CountryModule
         Task<PagedList<Country>> GetCountries(UserParams userParams);
 
         Task<Country> GetCountry(int id);
+
+        Task<State> GetState(int id);
     }
 }

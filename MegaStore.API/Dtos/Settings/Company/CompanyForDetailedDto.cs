@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MegaStore.API.Dtos.Core.Country;
 
 namespace MegaStore.API.Dtos.Settings.Company
 {

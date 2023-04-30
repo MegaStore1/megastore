@@ -32,8 +32,14 @@ namespace MegaStore.API.Data.Settings.CompanyRepo
 
         public Task<Company> GetCompany(int id)
         {
-            var company = this.context.Companies.Include(c => c.plants).FirstOrDefaultAsync(c => c.id == id);
+            var company = this.context.Companies.Include(c => c.plants).ThenInclude(p => p.state).FirstOrDefaultAsync(c => c.id == id);
             return company;
+        }
+
+        public async Task<Plant> GetPlant(int id)
+        {
+            var plant = await this.context.Plants.FirstOrDefaultAsync(p => p.id == id);
+            return plant;
         }
     }
 }
