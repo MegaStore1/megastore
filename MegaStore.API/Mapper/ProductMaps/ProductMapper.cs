@@ -20,6 +20,9 @@ namespace MegaStore.API.Mapper.ProductMaps
 
             CreateMap<Product, ProductForListDto>();
             CreateMap<Product, ProductForDetailsDto>();
+
+            CreateMap<ColorForAddDto, Color>();
+            CreateMap<Color, ColorDto>();
         }
     }
 }

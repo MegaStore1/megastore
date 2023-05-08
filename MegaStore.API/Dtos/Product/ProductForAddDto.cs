@@ -12,6 +12,8 @@ namespace MegaStore.API.Dtos.Product
         [Range(1, Int32.MaxValue)]
         public int categoryId { get; set; }
 
+        public int colorId { get; set; }
+
         [Required]
         public string productName { get; set; }
     }

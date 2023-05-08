@@ -14,5 +14,7 @@ namespace MegaStore.API.Models.Product.Product
         public string productName { get; set; }
         public int categoryId { get; set; }
         public Category category { get; set; }
+        public int? colorId { get; set; } // int? adds nullable foreign key 
+        public Color color { get; set; }
     }
 }

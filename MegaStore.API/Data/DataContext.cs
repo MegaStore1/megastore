@@ -29,6 +29,7 @@ namespace MegaStore.API.Data
 
         public DbSet<Category> Category { get; set; }
         public DbSet<Product> Product { get; set; }
+        public DbSet<Color> Color { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -94,37 +95,47 @@ namespace MegaStore.API.Data
                 .Property(o => o.creationDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
             modelBuilder.Entity<Company>()
-            .Property(o => o.updateDate)
-            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                .Property(o => o.updateDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             modelBuilder.Entity<Plant>()
                 .Property(o => o.creationDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
             modelBuilder.Entity<Plant>()
-            .Property(o => o.updateDate)
-            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                .Property(o => o.updateDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             modelBuilder.Entity<Category>()
                 .Property(o => o.status)
                 .HasDefaultValue(true);
 
             modelBuilder.Entity<Product>()
-            .Property(o => o.status)
-            .HasDefaultValue(true);
+                .Property(o => o.status)
+                .HasDefaultValue(true);
 
             modelBuilder.Entity<Category>()
                 .Property(o => o.creationDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
             modelBuilder.Entity<Category>()
-            .Property(o => o.updateDate)
-            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                .Property(o => o.updateDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             modelBuilder.Entity<Product>()
                 .Property(o => o.creationDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
             modelBuilder.Entity<Product>()
-            .Property(o => o.updateDate)
-            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                .Property(o => o.updateDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<Color>()
+                .Property(o => o.creationDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<Color>()
+                .Property(o => o.updateDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<Color>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
 
         }
 

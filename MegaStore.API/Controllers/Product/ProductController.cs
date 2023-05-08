@@ -126,5 +126,42 @@ namespace MegaStore.API.Controllers.Product
             var productToReturn = this.mapper.Map<ProductForDetailsDto>(product);
             return Ok(productToReturn);
         }
+
+
+        // Attribute Functions
+        [HttpPost("color")]
+        public async Task<IActionResult> AddColor(ColorForAddDto colorDto)
+        {
+            int id = Extensions.GetSessionDetails(this).id;
+            int plantId = Extensions.GetSessionDetails(this).plantId;
+
+            var plant = await this.companyRepository.GetPlant(plantId);
+            if (null == plant)
+                return BadRequest($"Plant with the id {plantId} does not exists");
+
+            var color = await this.repository.ColorExists(colorDto.colorName, plantId);
+            if (color)
+                return BadRequest($"Color {colorDto.colorName} already Exists");
+
+
+            var colorToCreate = this.mapper.Map<Color>(colorDto);
+            colorToCreate.creationUserId = id;
+            colorToCreate.updateUserId = id;
+            colorToCreate.plantId = plantId;
+
+            this.repository.Add<Color>(colorToCreate);
+            await this.repository.SaveAll();
+            return NoContent();
+        }
+
+        [HttpGet("color")]
+        public async Task<IActionResult> GetColors(int id)
+        {
+            int plantId = Extensions.GetSessionDetails(this).plantId;
+
+            var colors = await this.repository.GetColors(plantId);
+            var colorToReturn = this.mapper.Map<ICollection<ColorDto>>(colors);
+            return Ok(colorToReturn);
+        }
     }
 }

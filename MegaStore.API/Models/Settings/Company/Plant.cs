@@ -26,5 +26,7 @@ namespace MegaStore.API.Models.Settings.Company
 
         public ICollection<Category> categories { get; set; }
         public ICollection<User> Users { get; set; }
+
+        public ICollection<Color> colors { get; set; }
     }
 }

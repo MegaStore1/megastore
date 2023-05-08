@@ -16,5 +16,11 @@ namespace MegaStore.API.Data.ProductRepo
         Task<Product> GetProduct(int id, int plantId);
         Task<PagedList<Category>> GetCategories(UserParams userParams, int plantId);
         Task<Category> GetCategory(int id, int plantId);
+
+        // Product Attributes
+        Task<ICollection<Color>> GetColors(int plantId);
+        Task<bool> ColorExists(string colorName, int plantId);
+        Task<Color> GetColor(int id, int plantId);
+
     }
 }
