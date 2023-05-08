@@ -3,6 +3,7 @@ using System;
 using MegaStore.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MegaStore.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230507203526_CategoryTableAdded")]
+    partial class CategoryTableAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -226,9 +229,7 @@ namespace MegaStore.API.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("creationDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("creationUserId")
                         .HasColumnType("INTEGER");
@@ -237,14 +238,10 @@ namespace MegaStore.API.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValue(true);
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("updateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("updateUserId")
                         .HasColumnType("INTEGER");
@@ -254,47 +251,6 @@ namespace MegaStore.API.Migrations
                     b.HasIndex("plantId");
 
                     b.ToTable("mspCategory");
-                });
-
-            modelBuilder.Entity("MegaStore.API.Models.Product.Product.Product", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("categoryId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("creationDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("creationUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("productName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValue(true);
-
-                    b.Property<DateTime>("updateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("updateUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("categoryId");
-
-                    b.ToTable("mspProduct");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.Settings.Company.Company", b =>
@@ -426,9 +382,6 @@ namespace MegaStore.API.Migrations
                     b.Property<int>("creationUserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("plantId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<bool>("status")
                         .HasColumnType("INTEGER");
 
@@ -441,8 +394,6 @@ namespace MegaStore.API.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("plantId");
 
                     b.ToTable("msuUser");
                 });
@@ -491,17 +442,6 @@ namespace MegaStore.API.Migrations
                     b.Navigation("plant");
                 });
 
-            modelBuilder.Entity("MegaStore.API.Models.Product.Product.Product", b =>
-                {
-                    b.HasOne("MegaStore.API.Models.Product.Product.Category", "category")
-                        .WithMany()
-                        .HasForeignKey("categoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("category");
-                });
-
             modelBuilder.Entity("MegaStore.API.Models.Settings.Company.Plant", b =>
                 {
                     b.HasOne("MegaStore.API.Models.Settings.Company.Company", "company")
@@ -540,17 +480,6 @@ namespace MegaStore.API.Migrations
                     b.Navigation("user");
                 });
 
-            modelBuilder.Entity("MegaStore.API.Models.User", b =>
-                {
-                    b.HasOne("MegaStore.API.Models.Settings.Company.Plant", "plant")
-                        .WithMany("Users")
-                        .HasForeignKey("plantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("plant");
-                });
-
             modelBuilder.Entity("MegaStore.API.Models.Core.CountryModel.Country", b =>
                 {
                     b.Navigation("States");
@@ -573,8 +502,6 @@ namespace MegaStore.API.Migrations
 
             modelBuilder.Entity("MegaStore.API.Models.Settings.Company.Plant", b =>
                 {
-                    b.Navigation("Users");
-
                     b.Navigation("categories");
                 });
 

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MegaStore.API.Models;
 using MegaStore.API.Models.Core;
 using MegaStore.API.Models.Core.CountryModel;
+using MegaStore.API.Models.Product.Product;
 using MegaStore.API.Models.Settings.Company;
 using MegaStore.API.Models.Shared;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,9 @@ namespace MegaStore.API.Data
 
         public DbSet<Company> Companies { get; set; }
         public DbSet<Plant> Plants { get; set; }
+
+        public DbSet<Category> Category { get; set; }
+        public DbSet<Product> Product { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -97,6 +101,28 @@ namespace MegaStore.API.Data
                 .Property(o => o.creationDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
             modelBuilder.Entity<Plant>()
+            .Property(o => o.updateDate)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<Category>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
+
+            modelBuilder.Entity<Product>()
+            .Property(o => o.status)
+            .HasDefaultValue(true);
+
+            modelBuilder.Entity<Category>()
+                .Property(o => o.creationDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<Category>()
+            .Property(o => o.updateDate)
+            .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<Product>()
+                .Property(o => o.creationDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<Product>()
             .Property(o => o.updateDate)
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
 

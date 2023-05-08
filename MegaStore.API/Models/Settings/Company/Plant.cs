@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MegaStore.API.Models.Core;
 using MegaStore.API.Models.Core.CountryModel;
+using MegaStore.API.Models.Product.Product;
 
 namespace MegaStore.API.Models.Settings.Company
 {
@@ -22,5 +23,8 @@ namespace MegaStore.API.Models.Settings.Company
         public int companyId { get; set; }
         public Company company { get; set; }
         public bool status { get; set; }
+
+        public ICollection<Category> categories { get; set; }
+        public ICollection<User> Users { get; set; }
     }
 }

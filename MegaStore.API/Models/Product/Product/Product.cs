@@ -1,0 +1,18 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
+using MegaStore.API.Models.Core;
+
+namespace MegaStore.API.Models.Product.Product
+{
+    [Table("mspProduct")]
+    public class Product : Base
+    {
+        public int id { get; set; }
+        public string productName { get; set; }
+        public int categoryId { get; set; }
+        public Category category { get; set; }
+    }
+}

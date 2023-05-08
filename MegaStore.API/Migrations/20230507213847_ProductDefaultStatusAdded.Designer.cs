@@ -3,6 +3,7 @@ using System;
 using MegaStore.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MegaStore.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230507213847_ProductDefaultStatusAdded")]
+    partial class ProductDefaultStatusAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -226,9 +229,7 @@ namespace MegaStore.API.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("creationDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("creationUserId")
                         .HasColumnType("INTEGER");
@@ -242,9 +243,7 @@ namespace MegaStore.API.Migrations
                         .HasDefaultValue(true);
 
                     b.Property<DateTime>("updateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("updateUserId")
                         .HasColumnType("INTEGER");
@@ -266,9 +265,7 @@ namespace MegaStore.API.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("creationDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("creationUserId")
                         .HasColumnType("INTEGER");
@@ -283,9 +280,7 @@ namespace MegaStore.API.Migrations
                         .HasDefaultValue(true);
 
                     b.Property<DateTime>("updateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("updateUserId")
                         .HasColumnType("INTEGER");
@@ -426,9 +421,6 @@ namespace MegaStore.API.Migrations
                     b.Property<int>("creationUserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("plantId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<bool>("status")
                         .HasColumnType("INTEGER");
 
@@ -441,8 +433,6 @@ namespace MegaStore.API.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("plantId");
 
                     b.ToTable("msuUser");
                 });
@@ -540,17 +530,6 @@ namespace MegaStore.API.Migrations
                     b.Navigation("user");
                 });
 
-            modelBuilder.Entity("MegaStore.API.Models.User", b =>
-                {
-                    b.HasOne("MegaStore.API.Models.Settings.Company.Plant", "plant")
-                        .WithMany("Users")
-                        .HasForeignKey("plantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("plant");
-                });
-
             modelBuilder.Entity("MegaStore.API.Models.Core.CountryModel.Country", b =>
                 {
                     b.Navigation("States");
@@ -573,8 +552,6 @@ namespace MegaStore.API.Migrations
 
             modelBuilder.Entity("MegaStore.API.Models.Settings.Company.Plant", b =>
                 {
-                    b.Navigation("Users");
-
                     b.Navigation("categories");
                 });
 
