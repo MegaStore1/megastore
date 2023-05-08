@@ -51,9 +51,15 @@ namespace MegaStore.API.Helpers
         public static Session GetSessionDetails(ControllerBase controller)
         {
             int id = int.Parse(controller.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            int plantId = int.Parse(controller.User.FindFirst(ClaimTypes.Sid)!.Value);
+            string username = controller.User.FindFirst(ClaimTypes.Name)!.Value;
+            string email = controller.User.FindFirst(ClaimTypes.Email)!.Value;
 
             session = new Session();
             session.id = id;
+            session.plantId = plantId;
+            session.username = username;
+            session.email = email;
             return session;
         }
     }

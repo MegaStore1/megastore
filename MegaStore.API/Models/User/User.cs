@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using MegaStore.API.Models.Core;
+using MegaStore.API.Models.Settings.Company;
 
 namespace MegaStore.API.Models
 {
@@ -18,5 +19,7 @@ namespace MegaStore.API.Models
 
         public ICollection<Photo> Photos { get; set; }
         public ICollection<ModulePage> pages { get; set; }
+        public int plantId { get; set; }
+        public Plant plant { get; set; }
     }
 }

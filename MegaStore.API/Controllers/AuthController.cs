@@ -38,7 +38,8 @@ namespace MegaStore.API.Controllers
             var userToCreate = new User
             {
                 Email = userForRegisterDto.Email,
-                Username = userForRegisterDto.Username
+                Username = userForRegisterDto.Username,
+                plantId = userForRegisterDto.plantId
             };
 
             var createdUser = await this.repository.Register(userToCreate, userForRegisterDto.Password);
@@ -58,7 +59,8 @@ namespace MegaStore.API.Controllers
             {
                 new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
                 new Claim(ClaimTypes.Name, userFromRepo.Username),
-                new Claim(ClaimTypes.Email, userFromRepo.Email)
+                new Claim(ClaimTypes.Email, userFromRepo.Email),
+                new Claim(ClaimTypes.Sid, userFromRepo.plantId.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding

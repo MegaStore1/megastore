@@ -15,5 +15,6 @@ namespace MegaStore.API.Models.Core
 
         public int updateUserId { get; set; }
         public DateTime updateDate { get; set; }
+        public bool status { get; set; }
     }
 }
