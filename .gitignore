@@ -11,3 +11,17 @@ MegaStore.API/obj
 *.dll
 *.db
 .DS_Store
+*.jpg
+*.JPG
+*.png
+*.PNG
+*.jpeg
+*.JPEG
+*.JPE
+*.jpe
+*.BMP
+*.bmp
+*.GIF
+*.gif
+*.mp4
+*.MP4

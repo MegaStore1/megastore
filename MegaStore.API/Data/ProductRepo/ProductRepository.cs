@@ -55,7 +55,10 @@ namespace MegaStore.API.Data.ProductRepo
 
         public async Task<Product> GetProduct(int id, int plantId)
         {
-            var product = await this.context.Product.Include(m => m.category).Include(o => o.color).ThenInclude(o => o.plant).FirstOrDefaultAsync(x => x.id == id && x.category.plantId == plantId);
+            var product = await this.context.Product
+            .Include(m => m.category)
+            .Include(o => o.files)
+            .Include(o => o.color).ThenInclude(o => o.plant).FirstOrDefaultAsync(x => x.id == id && x.category.plantId == plantId);
             return product;
         }
 
