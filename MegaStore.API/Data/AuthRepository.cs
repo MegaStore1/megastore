@@ -19,7 +19,9 @@ namespace MegaStore.API.Data
 
         public async Task<User> Login(string email, string password)
         {
-            var user = await this.context.Users.Include(p => p.Photos).Include(o => o.plant).Include(o => o.plant).FirstOrDefaultAsync(x => x.Email == email);
+            var user = await this.context.Users.Include(p => p.Photos).Include(o => o.plant).FirstOrDefaultAsync(x => x.Email == email);
+
+            if (null == user) return null;
 
             if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
                 return null;

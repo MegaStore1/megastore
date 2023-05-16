@@ -3,6 +3,7 @@ using System;
 using MegaStore.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MegaStore.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230508225850_ProductColorIdNullable")]
+    partial class ProductColorIdNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -274,9 +277,6 @@ namespace MegaStore.API.Migrations
                     b.Property<int>("creationUserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("plantId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<bool>("status")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
@@ -291,8 +291,6 @@ namespace MegaStore.API.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("id");
-
-                    b.HasIndex("plantId");
 
                     b.ToTable("mspColor");
                 });
@@ -341,58 +339,6 @@ namespace MegaStore.API.Migrations
                     b.HasIndex("colorId");
 
                     b.ToTable("mspProduct");
-                });
-
-            modelBuilder.Entity("MegaStore.API.Models.Product.Product.ProductFile", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("contentType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("creationDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("creationUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("fileLength")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("fileName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("fileType")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("productId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValue(true);
-
-                    b.Property<DateTime>("updateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("updateUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("productId");
-
-                    b.ToTable("mspProductFile");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.Settings.Company.Company", b =>
@@ -589,17 +535,6 @@ namespace MegaStore.API.Migrations
                     b.Navigation("plant");
                 });
 
-            modelBuilder.Entity("MegaStore.API.Models.Product.Product.Color", b =>
-                {
-                    b.HasOne("MegaStore.API.Models.Settings.Company.Plant", "plant")
-                        .WithMany("colors")
-                        .HasForeignKey("plantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("plant");
-                });
-
             modelBuilder.Entity("MegaStore.API.Models.Product.Product.Product", b =>
                 {
                     b.HasOne("MegaStore.API.Models.Product.Product.Category", "category")
@@ -615,17 +550,6 @@ namespace MegaStore.API.Migrations
                     b.Navigation("category");
 
                     b.Navigation("color");
-                });
-
-            modelBuilder.Entity("MegaStore.API.Models.Product.Product.ProductFile", b =>
-                {
-                    b.HasOne("MegaStore.API.Models.Product.Product.Product", "product")
-                        .WithMany("files")
-                        .HasForeignKey("productId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("product");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.Settings.Company.Plant", b =>
@@ -697,11 +621,6 @@ namespace MegaStore.API.Migrations
                     b.Navigation("products");
                 });
 
-            modelBuilder.Entity("MegaStore.API.Models.Product.Product.Product", b =>
-                {
-                    b.Navigation("files");
-                });
-
             modelBuilder.Entity("MegaStore.API.Models.Settings.Company.Company", b =>
                 {
                     b.Navigation("plants");
@@ -712,8 +631,6 @@ namespace MegaStore.API.Migrations
                     b.Navigation("Users");
 
                     b.Navigation("categories");
-
-                    b.Navigation("colors");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.User", b =>

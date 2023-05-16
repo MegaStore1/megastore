@@ -3,6 +3,7 @@ using System;
 using MegaStore.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MegaStore.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230514220417_ProductFileTableAdded")]
+    partial class ProductFileTableAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -361,8 +364,9 @@ namespace MegaStore.API.Migrations
                     b.Property<int>("creationUserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("fileLength")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("fileLength")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("fileName")
                         .IsRequired()

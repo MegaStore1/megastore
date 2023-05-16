@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -80,7 +81,7 @@ namespace MegaStore.API.Controllers.Product
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProduct(ProductForAddDto productDto)
+        public async Task<IActionResult> AddProduct([FromForm] ProductForAddDto productDto)
         {
             int id = Extensions.GetSessionDetails(this).id;
             int plantId = Extensions.GetSessionDetails(this).plantId;
@@ -93,12 +94,60 @@ namespace MegaStore.API.Controllers.Product
             if (product)
                 return BadRequest($"Product {productDto.productName} already Exists");
 
+            productDto.files = new Collection<ProductFileForAddDto>();
 
+            if (productDto.imagesOrVideos != null)
+            {
+                foreach (FormFile file in productDto.imagesOrVideos)
+                {
+                    string fileName = await FileManager.Upload(file, "Product/Files");
+                    ProductFileForAddDto productFile = new ProductFileForAddDto();
+                    productFile.fileName = fileName;
+                    productFile.fileLength = file.Length;
+                    productFile.contentType = file.ContentDisposition;
+                    productFile.fileType = file.ContentType;
+                    productFile.creationUserId = id;
+                    productFile.updateUserId = id;
+                    productDto.files.Add(productFile);
+                }
+            }
             var productToCreate = this.mapper.Map<MegaStore.API.Models.Product.Product.Product>(productDto);
+
             productToCreate.creationUserId = id;
             productToCreate.updateUserId = id;
 
             this.repository.Add<MegaStore.API.Models.Product.Product.Product>(productToCreate);
+            await this.repository.SaveAll();
+            return NoContent();
+        }
+
+        [HttpPost("addFile")]
+        public async Task<IActionResult> AddFile([FromForm] ProductFileListForAddDto fileDto)
+        {
+            int id = Extensions.GetSessionDetails(this).id;
+            int plantId = Extensions.GetSessionDetails(this).plantId;
+
+            var product = await this.repository.GetProduct(fileDto.productId, plantId);
+            if (product == null)
+                return BadRequest($"Product with id {fileDto.productId} does not Exists");
+
+            if (fileDto.imagesOrVideos != null)
+            {
+                foreach (FormFile file in fileDto.imagesOrVideos)
+                {
+                    string fileName = await FileManager.Upload(file, "Product/Files");
+                    ProductFileForAddDto productFile = new ProductFileForAddDto();
+                    productFile.fileName = fileName;
+                    productFile.fileLength = file.Length;
+                    productFile.contentType = file.ContentDisposition;
+                    productFile.fileType = file.ContentType;
+                    productFile.productId = fileDto.productId;
+                    productFile.creationUserId = id;
+                    productFile.updateUserId = id;
+                    var productFileToCreate = this.mapper.Map<ProductFile>(productFile);
+                    this.repository.Add<ProductFile>(productFileToCreate);
+                }
+            }
             await this.repository.SaveAll();
             return NoContent();
         }
@@ -125,6 +174,43 @@ namespace MegaStore.API.Controllers.Product
             var product = await this.repository.GetProduct(id, plantId);
             var productToReturn = this.mapper.Map<ProductForDetailsDto>(product);
             return Ok(productToReturn);
+        }
+
+
+        // Attribute Functions
+        [HttpPost("color")]
+        public async Task<IActionResult> AddColor(ColorForAddDto colorDto)
+        {
+            int id = Extensions.GetSessionDetails(this).id;
+            int plantId = Extensions.GetSessionDetails(this).plantId;
+
+            var plant = await this.companyRepository.GetPlant(plantId);
+            if (null == plant)
+                return BadRequest($"Plant with the id {plantId} does not exists");
+
+            var color = await this.repository.ColorExists(colorDto.colorName, plantId);
+            if (color)
+                return BadRequest($"Color {colorDto.colorName} already Exists");
+
+
+            var colorToCreate = this.mapper.Map<Color>(colorDto);
+            colorToCreate.creationUserId = id;
+            colorToCreate.updateUserId = id;
+            colorToCreate.plantId = plantId;
+
+            this.repository.Add<Color>(colorToCreate);
+            await this.repository.SaveAll();
+            return NoContent();
+        }
+
+        [HttpGet("color")]
+        public async Task<IActionResult> GetColors(int id)
+        {
+            int plantId = Extensions.GetSessionDetails(this).plantId;
+
+            var colors = await this.repository.GetColors(plantId);
+            var colorToReturn = this.mapper.Map<ICollection<ColorDto>>(colors);
+            return Ok(colorToReturn);
         }
     }
 }

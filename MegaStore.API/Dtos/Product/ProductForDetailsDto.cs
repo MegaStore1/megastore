@@ -9,7 +9,7 @@ namespace MegaStore.API.Dtos.Product
     {
         public int id { get; set; }
         public string productName { get; set; }
-        public int categoryId { get; set; }
         public CategoryForDetailsDto category { get; set; }
+        public ColorDto color { get; set; }
     }
 }

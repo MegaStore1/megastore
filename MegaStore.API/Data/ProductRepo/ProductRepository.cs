@@ -23,6 +23,11 @@ namespace MegaStore.API.Data.ProductRepo
             return await this.context.Category.AnyAsync(c => c.categoryName == categoryName && c.plantId == plantId);
         }
 
+        public async Task<bool> ColorExists(string colorName, int plantId)
+        {
+            return await this.context.Color.AnyAsync(o => o.colorName == colorName && o.plantId == plantId);
+        }
+
         public async Task<PagedList<Category>> GetCategories(UserParams userParams, int plantId)
         {
             var categories = this.context.Category.Include(o => o.plant).AsQueryable().Where(o => o.plantId == plantId);
@@ -36,15 +41,27 @@ namespace MegaStore.API.Data.ProductRepo
             return category;
         }
 
+        public async Task<Color> GetColor(int id, int plantId)
+        {
+            var color = await this.context.Color.FirstOrDefaultAsync(o => o.id == id && o.plantId == plantId);
+            return color;
+        }
+
+        public async Task<ICollection<Color>> GetColors(int plantId)
+        {
+            var colors = await this.context.Color.Where(o => o.plantId == plantId).ToListAsync();
+            return colors;
+        }
+
         public async Task<Product> GetProduct(int id, int plantId)
         {
-            var product = await this.context.Product.Include(m => m.category).ThenInclude(o => o.plant).FirstOrDefaultAsync(x => x.id == id && x.category.plantId == plantId);
+            var product = await this.context.Product.Include(m => m.category).Include(o => o.color).ThenInclude(o => o.plant).FirstOrDefaultAsync(x => x.id == id && x.category.plantId == plantId);
             return product;
         }
 
         public async Task<PagedList<Product>> GetProducts(UserParams userParams, int plantId)
         {
-            var products = this.context.Product.Include(o => o.category).AsQueryable().Where(o => o.category.plantId == plantId);
+            var products = this.context.Product.Include(o => o.category).Include(o => o.color).AsQueryable().Where(o => o.category.plantId == plantId);
 
             return await PagedList<Product>.CreateAsync(products, userParams.pageNumber, userParams.pageSize);
         }
