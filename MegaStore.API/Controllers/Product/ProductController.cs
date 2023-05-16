@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -80,7 +81,7 @@ namespace MegaStore.API.Controllers.Product
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProduct(ProductForAddDto productDto)
+        public async Task<IActionResult> AddProduct([FromForm] ProductForAddDto productDto)
         {
             int id = Extensions.GetSessionDetails(this).id;
             int plantId = Extensions.GetSessionDetails(this).plantId;
@@ -93,12 +94,60 @@ namespace MegaStore.API.Controllers.Product
             if (product)
                 return BadRequest($"Product {productDto.productName} already Exists");
 
+            productDto.files = new Collection<ProductFileForAddDto>();
 
+            if (productDto.imagesOrVideos != null)
+            {
+                foreach (FormFile file in productDto.imagesOrVideos)
+                {
+                    string fileName = await FileManager.Upload(file, "Product/Files");
+                    ProductFileForAddDto productFile = new ProductFileForAddDto();
+                    productFile.fileName = fileName;
+                    productFile.fileLength = file.Length;
+                    productFile.contentType = file.ContentDisposition;
+                    productFile.fileType = file.ContentType;
+                    productFile.creationUserId = id;
+                    productFile.updateUserId = id;
+                    productDto.files.Add(productFile);
+                }
+            }
             var productToCreate = this.mapper.Map<MegaStore.API.Models.Product.Product.Product>(productDto);
+
             productToCreate.creationUserId = id;
             productToCreate.updateUserId = id;
 
             this.repository.Add<MegaStore.API.Models.Product.Product.Product>(productToCreate);
+            await this.repository.SaveAll();
+            return NoContent();
+        }
+
+        [HttpPost("addFile")]
+        public async Task<IActionResult> AddFile([FromForm] ProductFileListForAddDto fileDto)
+        {
+            int id = Extensions.GetSessionDetails(this).id;
+            int plantId = Extensions.GetSessionDetails(this).plantId;
+
+            var product = await this.repository.GetProduct(fileDto.productId, plantId);
+            if (product == null)
+                return BadRequest($"Product with id {fileDto.productId} does not Exists");
+
+            if (fileDto.imagesOrVideos != null)
+            {
+                foreach (FormFile file in fileDto.imagesOrVideos)
+                {
+                    string fileName = await FileManager.Upload(file, "Product/Files");
+                    ProductFileForAddDto productFile = new ProductFileForAddDto();
+                    productFile.fileName = fileName;
+                    productFile.fileLength = file.Length;
+                    productFile.contentType = file.ContentDisposition;
+                    productFile.fileType = file.ContentType;
+                    productFile.productId = fileDto.productId;
+                    productFile.creationUserId = id;
+                    productFile.updateUserId = id;
+                    var productFileToCreate = this.mapper.Map<ProductFile>(productFile);
+                    this.repository.Add<ProductFile>(productFileToCreate);
+                }
+            }
             await this.repository.SaveAll();
             return NoContent();
         }

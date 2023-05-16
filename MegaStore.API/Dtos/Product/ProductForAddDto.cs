@@ -16,5 +16,8 @@ namespace MegaStore.API.Dtos.Product
 
         [Required]
         public string productName { get; set; }
+
+        public ICollection<IFormFile> imagesOrVideos { get; set; }
+        public ICollection<ProductFileForAddDto> files { get; set; }
     }
 }
