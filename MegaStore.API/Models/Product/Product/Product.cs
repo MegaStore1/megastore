@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using MegaStore.API.Models.Core;
+using MegaStore.API.Models.Product.Inventory;
 
 namespace MegaStore.API.Models.Product.Product
 {
@@ -17,5 +18,6 @@ namespace MegaStore.API.Models.Product.Product
         public int? colorId { get; set; } // int? adds nullable foreign key 
         public Color color { get; set; }
         public ICollection<ProductFile> files { get; set; }
+        public ICollection<ProductLine> lines { get; set; }
     }
 }

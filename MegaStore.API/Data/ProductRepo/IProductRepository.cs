@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MegaStore.API.Data.Core;
 using MegaStore.API.Helpers;
+using MegaStore.API.Models.Product.Inventory;
 using MegaStore.API.Models.Product.Product;
 
 namespace MegaStore.API.Data.ProductRepo
@@ -21,6 +22,10 @@ namespace MegaStore.API.Data.ProductRepo
         Task<ICollection<Color>> GetColors(int plantId);
         Task<bool> ColorExists(string colorName, int plantId);
         Task<Color> GetColor(int id, int plantId);
+
+        // Product Line
+        Task<ProductLine> GetLine(int id);
+        Task<PagedList<ProductLine>> GetLines(UserParams userParams, int plantId);
 
     }
 }

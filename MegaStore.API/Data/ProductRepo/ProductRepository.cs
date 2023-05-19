@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MegaStore.API.Data.Core;
 using MegaStore.API.Helpers;
+using MegaStore.API.Models.Product.Inventory;
 using MegaStore.API.Models.Product.Product;
 using Microsoft.EntityFrameworkCore;
 
@@ -58,13 +59,21 @@ namespace MegaStore.API.Data.ProductRepo
             var product = await this.context.Product
             .Include(m => m.category)
             .Include(o => o.files)
-            .Include(o => o.color).ThenInclude(o => o.plant).FirstOrDefaultAsync(x => x.id == id && x.category.plantId == plantId);
+            .Include(o => o.color)
+            .ThenInclude(o => o.plant)
+            .Include(o => o.lines)
+            .FirstOrDefaultAsync(x => x.id == id && x.category.plantId == plantId);
             return product;
         }
 
         public async Task<PagedList<Product>> GetProducts(UserParams userParams, int plantId)
         {
-            var products = this.context.Product.Include(o => o.category).Include(o => o.color).AsQueryable().Where(o => o.category.plantId == plantId);
+            var products = this.context.Product
+            .Include(o => o.category)
+            .Include(o => o.color)
+            .Include(o => o.lines)
+            .AsQueryable()
+            .Where(o => o.category.plantId == plantId);
 
             return await PagedList<Product>.CreateAsync(products, userParams.pageNumber, userParams.pageSize);
         }
@@ -73,6 +82,27 @@ namespace MegaStore.API.Data.ProductRepo
         {
 
             return await this.context.Product.AnyAsync(c => c.productName == productName && c.category.plantId == plantId);
+        }
+
+
+        public async Task<ProductLine> GetLine(int id)
+        {
+            var line = await this.context.ProductLines
+            .Include(m => m.product)
+            .ThenInclude(o => o.category)
+            .FirstOrDefaultAsync(x => x.id == id);
+            return line;
+        }
+
+        public async Task<PagedList<ProductLine>> GetLines(UserParams userParams, int plantId)
+        {
+            var products = this.context.ProductLines
+            .Include(o => o.product)
+            .AsQueryable()
+            .Where(o => o.product.category.plantId == plantId)
+            .OrderBy(o => o.product.productName);
+
+            return await PagedList<ProductLine>.CreateAsync(products, userParams.pageNumber, userParams.pageSize);
         }
     }
 }

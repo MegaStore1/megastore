@@ -8,6 +8,7 @@ using MegaStore.API.Data.ProductRepo;
 using MegaStore.API.Data.Settings.CompanyRepo;
 using MegaStore.API.Dtos.Product;
 using MegaStore.API.Helpers;
+using MegaStore.API.Models.Product.Inventory;
 using MegaStore.API.Models.Product.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -211,6 +212,57 @@ namespace MegaStore.API.Controllers.Product
             var colors = await this.repository.GetColors(plantId);
             var colorToReturn = this.mapper.Map<ICollection<ColorDto>>(colors);
             return Ok(colorToReturn);
+        }
+
+        [HttpPost("line")]
+        public async Task<IActionResult> AddLine(ProductLineToCreateDto productLineDto)
+        {
+            int id = Extensions.GetSessionDetails(this).id;
+            int plantId = Extensions.GetSessionDetails(this).plantId;
+
+            var product = await this.repository.GetProduct(productLineDto.productId, plantId);
+            if (product == null)
+                return BadRequest($"Product with id {productLineDto.productId} does not Exists");
+
+            ProductLine lineToCreate = this.mapper.Map<ProductLine>(productLineDto);
+            lineToCreate.creationUserId = id;
+            lineToCreate.updateUserId = id;
+
+            this.repository.Add<ProductLine>(lineToCreate);
+            await this.repository.SaveAll();
+            return NoContent();
+        }
+
+        [HttpDelete("line/{id}")]
+        public async Task<IActionResult> DeleteLine(int id)
+        {
+            var lineToDelete = await this.repository.GetLine(id);
+            if (lineToDelete == null)
+                return BadRequest($"Line with id {id} does not Exists");
+            this.repository.Delete(lineToDelete);
+            await this.repository.SaveAll();
+            return NoContent();
+        }
+
+        [HttpGet("line/{id}")]
+        public async Task<IActionResult> GetLine(int id)
+        {
+            var line = await this.repository.GetLine(id);
+            var lineToReturn = this.mapper.Map<ProductLineForDetailsDto>(line);
+            return Ok(lineToReturn);
+        }
+
+        [HttpGet("lines")]
+        public async Task<IActionResult> GetLines([FromQuery] UserParams userParams)
+        {
+            int plantId = Extensions.GetSessionDetails(this).plantId;
+
+            var lines = await this.repository.GetLines(userParams, plantId);
+            var linesToReturn = this.mapper.Map<IEnumerable<ProductLineDto>>(lines);
+
+            Response.AddPagintaion(lines.currentPage, lines.pageSize, lines.totalCount, lines.totalPages);
+
+            return Ok(linesToReturn);
         }
     }
 }

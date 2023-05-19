@@ -57,6 +57,8 @@ namespace MegaStore.API.Controllers.Core
         public async Task<IActionResult> DeleteModule(int id)
         {
             var moduleToDelete = await this.repository.GetModule(id);
+            if (moduleToDelete == null)
+                return BadRequest($"Module with id {id} does not Exists");
             this.repository.Delete(moduleToDelete);
             await this.repository.SaveAll();
             return NoContent();

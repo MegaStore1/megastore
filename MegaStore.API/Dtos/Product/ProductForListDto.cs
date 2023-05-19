@@ -11,5 +11,6 @@ namespace MegaStore.API.Dtos.Product
         public string productName { get; set; }
         public CategoryForListDto category { get; set; }
         public ColorDto color { get; set; }
+        public int totalAvailable { get; set; }
     }
 }
