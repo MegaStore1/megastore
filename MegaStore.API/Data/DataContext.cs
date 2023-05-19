@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MegaStore.API.Models;
 using MegaStore.API.Models.Core;
 using MegaStore.API.Models.Core.CountryModel;
+using MegaStore.API.Models.Product.Inventory;
 using MegaStore.API.Models.Product.Product;
 using MegaStore.API.Models.Settings.Company;
 using MegaStore.API.Models.Shared;
@@ -31,6 +32,7 @@ namespace MegaStore.API.Data
         public DbSet<Product> Product { get; set; }
         public DbSet<Color> Color { get; set; }
         public DbSet<ProductFile> ProductFiles { get; set; }
+        public DbSet<ProductLine> ProductLines { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -147,6 +149,18 @@ namespace MegaStore.API.Data
             modelBuilder.Entity<ProductFile>()
                 .Property(o => o.status)
                 .HasDefaultValue(true);
+
+            // Product Line
+            modelBuilder.Entity<ProductLine>()
+                .Property(o => o.creationDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<ProductLine>()
+                .Property(o => o.updateDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<ProductLine>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
+
 
         }
 

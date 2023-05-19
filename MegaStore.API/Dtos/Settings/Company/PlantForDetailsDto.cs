@@ -15,5 +15,6 @@ namespace MegaStore.API.Dtos.Settings.Company
         public long lng { get; set; }
         public StateDto state { get; set; }
         public bool status { get; set; }
+        public ICollection<UserForListDto> users { get; set; }
     }
 }

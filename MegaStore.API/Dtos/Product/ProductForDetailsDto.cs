@@ -12,5 +12,7 @@ namespace MegaStore.API.Dtos.Product
         public CategoryForDetailsDto category { get; set; }
         public ColorDto color { get; set; }
         public ICollection<ProductFileForListDto> files { get; set; }
+        public ICollection<ProductLineDto> lines { get; set; }
+        public int totalAvailable { get; set; }
     }
 }
