@@ -76,6 +76,7 @@ namespace MegaStore.API.Data.ProductRepo
             .Include(o => o.category)
             .Include(o => o.color)
             .Include(o => o.lines)
+            .ThenInclude(o => o.orderLines)
             .AsQueryable()
             .Where(o => o.category.plantId == plantId);
 
