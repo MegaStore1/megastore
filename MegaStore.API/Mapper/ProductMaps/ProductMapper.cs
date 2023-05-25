@@ -22,12 +22,12 @@ namespace MegaStore.API.Mapper.ProductMaps
             CreateMap<Product, ProductForListDto>()
                 .ForMember(dest => dest.totalAvailable, opt =>
                 {
-                    opt.MapFrom(src => src.lines.Sum(o => o.amount));
+                    opt.MapFrom(src => src.lines.Sum(o => o.amount) - src.lines.Sum(o => o.orderLines.Sum(o => o.amount)));
                 });
             CreateMap<Product, ProductForDetailsDto>()
                 .ForMember(dest => dest.totalAvailable, opt =>
                 {
-                    opt.MapFrom(src => src.lines.Sum(o => o.amount));
+                    opt.MapFrom(src => src.lines.Sum(o => o.amount) - src.lines.Sum(o => o.orderLines.Sum(o => o.amount)));
                 });
 
             CreateMap<ColorForAddDto, Color>();
