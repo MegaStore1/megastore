@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MegaStore.API.Models;
 using MegaStore.API.Models.Core;
 using MegaStore.API.Models.Core.CountryModel;
+using MegaStore.API.Models.Order;
 using MegaStore.API.Models.Product.Inventory;
 using MegaStore.API.Models.Product.Product;
 using MegaStore.API.Models.Settings.Company;
@@ -33,6 +34,8 @@ namespace MegaStore.API.Data
         public DbSet<Color> Color { get; set; }
         public DbSet<ProductFile> ProductFiles { get; set; }
         public DbSet<ProductLine> ProductLines { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderLine> OrderLines { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -158,6 +161,28 @@ namespace MegaStore.API.Data
                 .Property(o => o.updateDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
             modelBuilder.Entity<ProductLine>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
+
+            // Order
+            modelBuilder.Entity<Order>()
+                .Property(o => o.creationDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<Order>()
+                .Property(o => o.updateDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<Order>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
+
+            // OrderLine
+            modelBuilder.Entity<OrderLine>()
+                .Property(o => o.creationDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<OrderLine>()
+                .Property(o => o.updateDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<OrderLine>()
                 .Property(o => o.status)
                 .HasDefaultValue(true);
 

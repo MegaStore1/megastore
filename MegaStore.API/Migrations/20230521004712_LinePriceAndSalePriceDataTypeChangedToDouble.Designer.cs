@@ -3,6 +3,7 @@ using System;
 using MegaStore.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MegaStore.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230521004712_LinePriceAndSalePriceDataTypeChangedToDouble")]
+    partial class LinePriceAndSalePriceDataTypeChangedToDouble
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -169,97 +172,6 @@ namespace MegaStore.API.Migrations
                     b.HasIndex("moduleId");
 
                     b.ToTable("mscModulePage");
-                });
-
-            modelBuilder.Entity("MegaStore.API.Models.Order.Order", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("creationDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("creationUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("customerId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("plantId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValue(true);
-
-                    b.Property<DateTime>("updateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("updateUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("plantId");
-
-                    b.ToTable("msoOrder");
-                });
-
-            modelBuilder.Entity("MegaStore.API.Models.Order.OrderLine", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("amount")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("creationDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("creationUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<double>("discount")
-                        .HasColumnType("REAL");
-
-                    b.Property<int>("orderId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("price")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("productLineId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValue(true);
-
-                    b.Property<DateTime>("updateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("updateUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("orderId");
-
-                    b.HasIndex("productLineId");
-
-                    b.ToTable("msoOrderLine");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.Photo", b =>
@@ -704,36 +616,6 @@ namespace MegaStore.API.Migrations
                     b.Navigation("module");
                 });
 
-            modelBuilder.Entity("MegaStore.API.Models.Order.Order", b =>
-                {
-                    b.HasOne("MegaStore.API.Models.Settings.Company.Plant", "plant")
-                        .WithMany()
-                        .HasForeignKey("plantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("plant");
-                });
-
-            modelBuilder.Entity("MegaStore.API.Models.Order.OrderLine", b =>
-                {
-                    b.HasOne("MegaStore.API.Models.Order.Order", "order")
-                        .WithMany("lines")
-                        .HasForeignKey("orderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MegaStore.API.Models.Product.Inventory.ProductLine", "productLine")
-                        .WithMany()
-                        .HasForeignKey("productLineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("order");
-
-                    b.Navigation("productLine");
-                });
-
             modelBuilder.Entity("MegaStore.API.Models.Photo", b =>
                 {
                     b.HasOne("MegaStore.API.Models.User", "User")
@@ -868,11 +750,6 @@ namespace MegaStore.API.Migrations
             modelBuilder.Entity("MegaStore.API.Models.Core.Module", b =>
                 {
                     b.Navigation("pages");
-                });
-
-            modelBuilder.Entity("MegaStore.API.Models.Order.Order", b =>
-                {
-                    b.Navigation("lines");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.Product.Product.Color", b =>
