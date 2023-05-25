@@ -31,7 +31,10 @@ namespace MegaStore.API.Data.ProductRepo
 
         public async Task<PagedList<Category>> GetCategories(UserParams userParams, int plantId)
         {
-            var categories = this.context.Category.Include(o => o.plant).AsQueryable().Where(o => o.plantId == plantId);
+            var categories = this.context.Category
+            .Include(o => o.plant)
+            .AsQueryable()
+            .Where(o => o.plantId == plantId);
 
             return await PagedList<Category>.CreateAsync(categories, userParams.pageNumber, userParams.pageSize);
         }
@@ -62,6 +65,7 @@ namespace MegaStore.API.Data.ProductRepo
             .Include(o => o.color)
             .ThenInclude(o => o.plant)
             .Include(o => o.lines)
+            .ThenInclude(o => o.orderLines)
             .FirstOrDefaultAsync(x => x.id == id && x.category.plantId == plantId);
             return product;
         }
