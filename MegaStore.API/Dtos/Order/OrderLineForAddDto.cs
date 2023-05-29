@@ -8,7 +8,7 @@ namespace MegaStore.API.Dtos.Order
 {
     public class OrderLineForAddDto
     {
-        public int price { get; set; }
+        public double price { get; set; }
         public double discount { get; set; }
 
         [Range(1, Int32.MaxValue)]

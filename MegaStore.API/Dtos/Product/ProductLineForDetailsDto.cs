@@ -12,5 +12,6 @@ namespace MegaStore.API.Dtos.Product
         public long price { get; set; }
         public long salePrice { get; set; }
         public ProductForDetailsDto product { get; set; }
+        public int available { get; set; }
     }
 }

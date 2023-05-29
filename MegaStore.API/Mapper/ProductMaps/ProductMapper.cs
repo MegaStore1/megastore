@@ -20,14 +20,38 @@ namespace MegaStore.API.Mapper.ProductMaps
             CreateMap<Category, CategoryForDetailsDto>();
 
             CreateMap<Product, ProductForListDto>()
-                .ForMember(dest => dest.totalAvailable, opt =>
+                .ForMember(dest => dest.total, opt =>
                 {
                     opt.MapFrom(src => src.lines.Sum(o => o.amount) - src.lines.Sum(o => o.orderLines.Sum(o => o.amount)));
+                })
+                .ForMember(dest => dest.lineId, opt =>
+                {
+                    opt.MapFrom(src => src.lines
+                    .FirstOrDefault(o => o.orderLines.Sum(o => o.amount) < o.amount).id);
+                })
+                .ForMember(dest => dest.totalAvailable, opt =>
+                {
+                    opt.MapFrom(src => src.lines
+                    .FirstOrDefault(o => o.orderLines.Sum(o => o.amount) < o.amount).amount - src.lines
+                    .FirstOrDefault(o => o.orderLines.Sum(o => o.amount) < o.amount).orderLines.Sum(o => o.amount)
+                    );
                 });
             CreateMap<Product, ProductForDetailsDto>()
-                .ForMember(dest => dest.totalAvailable, opt =>
+                .ForMember(dest => dest.total, opt =>
                 {
                     opt.MapFrom(src => src.lines.Sum(o => o.amount) - src.lines.Sum(o => o.orderLines.Sum(o => o.amount)));
+                })
+                .ForMember(dest => dest.lineId, opt =>
+                {
+                    opt.MapFrom(src => src.lines
+                    .FirstOrDefault(o => o.orderLines.Sum(o => o.amount) < o.amount).id);
+                })
+                .ForMember(dest => dest.totalAvailable, opt =>
+                {
+                    opt.MapFrom(src => src.lines
+                    .FirstOrDefault(o => o.orderLines.Sum(o => o.amount) < o.amount).amount - src.lines
+                    .FirstOrDefault(o => o.orderLines.Sum(o => o.amount) < o.amount).orderLines.Sum(o => o.amount)
+                    );
                 });
 
             CreateMap<ColorForAddDto, Color>();
@@ -36,7 +60,11 @@ namespace MegaStore.API.Mapper.ProductMaps
             CreateMap<ProductFile, ProductFileForListDto>();
 
             CreateMap<ProductLine, ProductLineDto>();
-            CreateMap<ProductLine, ProductLineForDetailsDto>();
+            CreateMap<ProductLine, ProductLineForDetailsDto>()
+                .ForMember(dest => dest.available, opt =>
+                {
+                    opt.MapFrom(src => src.amount - src.orderLines.Sum(o => o.amount));
+                });
             CreateMap<ProductLineToCreateDto, ProductLine>();
         }
     }

@@ -12,7 +12,7 @@ namespace MegaStore.API.Models.Order
     public class OrderLine : Base
     {
         public int id { get; set; }
-        public int price { get; set; }
+        public double price { get; set; }
         public double discount { get; set; }
         public int amount { get; set; }
         public int orderId { get; set; }

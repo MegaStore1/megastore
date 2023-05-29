@@ -95,6 +95,7 @@ namespace MegaStore.API.Data.ProductRepo
             var line = await this.context.ProductLines
             .Include(m => m.product)
             .ThenInclude(o => o.category)
+            .Include(o => o.orderLines)
             .FirstOrDefaultAsync(x => x.id == id);
             return line;
         }

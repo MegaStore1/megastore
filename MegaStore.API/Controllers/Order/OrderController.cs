@@ -7,8 +7,10 @@ using MegaStore.API.Data.OrderRepo;
 using MegaStore.API.Data.ProductRepo;
 using MegaStore.API.Data.Settings.CompanyRepo;
 using MegaStore.API.Dtos.Order;
+using MegaStore.API.Dtos.Product;
 using MegaStore.API.Helpers;
 using MegaStore.API.Models.Order;
+using MegaStore.API.Models.Product.Inventory;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -68,11 +70,23 @@ namespace MegaStore.API.Controllers.Order
             int id = Extensions.GetSessionDetails(this).id;
             int plantId = Extensions.GetSessionDetails(this).plantId;
 
+            foreach (var dtoLine in orderDto.lines)
+            {
+                var productLineFromRepo = await this.productRepository.GetLine(dtoLine.productLineId);
+                var lineMapped = this.mapper.Map<ProductLineForDetailsDto>(productLineFromRepo);
+                if (dtoLine.amount > lineMapped.available)
+                {
+                    return BadRequest("Not enough item available : " + productLineFromRepo.product.productName);
+                }
+
+            }
 
             var orderToCreate = this.mapper.Map<MegaStore.API.Models.Order.Order>(orderDto);
 
             foreach (OrderLine line in orderToCreate.lines)
             {
+                ProductLine productLine = await this.productRepository.GetLine(line.productLineId);
+                if (line.price == 0) line.price = productLine.salePrice;
                 line.creationUserId = id;
                 line.updateUserId = id;
             }
