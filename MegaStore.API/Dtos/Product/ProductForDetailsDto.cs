@@ -14,5 +14,7 @@ namespace MegaStore.API.Dtos.Product
         public ICollection<ProductFileForListDto> files { get; set; }
         public ICollection<ProductLineDto> lines { get; set; }
         public int totalAvailable { get; set; }
+        public int lineId { get; set; }
+        public int total { get; set; }
     }
 }
