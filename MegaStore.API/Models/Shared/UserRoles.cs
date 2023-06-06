@@ -9,7 +9,7 @@ using MegaStore.API.Models.Core;
 namespace MegaStore.API.Models.Shared
 {
     [Table("mssUserRoles")]
-    public class UserRoles
+    public class UserRoles : Base
     {
         public int userId { get; set; }
         public int pageId { get; set; }

@@ -53,6 +53,22 @@ namespace MegaStore.API.Data
             });
 
             modelBuilder.Entity<User>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
+
+            modelBuilder.Entity<UserRoles>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
+
+            modelBuilder.Entity<UserRoles>()
+                    .Property(b => b.creationDate)
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<UserRoles>()
+                    .Property(b => b.updateDate)
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<User>()
                 .HasMany(e => e.pages)
                 .WithMany(e => e.users)
                 .UsingEntity<UserRoles>();
@@ -66,6 +82,10 @@ namespace MegaStore.API.Data
                     .Property(b => b.updateDate)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+            modelBuilder.Entity<Photo>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
+
             modelBuilder.Entity<Country>()
                     .Property(b => b.creationDate)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -73,6 +93,10 @@ namespace MegaStore.API.Data
             modelBuilder.Entity<Country>()
                     .Property(b => b.updateDate)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<Country>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
 
             modelBuilder.Entity<Module>()
                     .Property(b => b.creationDate)
@@ -82,6 +106,10 @@ namespace MegaStore.API.Data
                     .Property(b => b.updateDate)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+            modelBuilder.Entity<Module>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
+
             modelBuilder.Entity<State>()
                     .Property(b => b.creationDate)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -89,6 +117,10 @@ namespace MegaStore.API.Data
             modelBuilder.Entity<State>()
                     .Property(b => b.updateDate)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<State>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
 
             modelBuilder.Entity<ModulePage>()
                             .Property(b => b.creationDate)
@@ -97,6 +129,10 @@ namespace MegaStore.API.Data
                 .Property(b => b.updateDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+            modelBuilder.Entity<ModulePage>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
+
             modelBuilder.Entity<Company>()
                 .Property(o => o.creationDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -104,12 +140,20 @@ namespace MegaStore.API.Data
                 .Property(o => o.updateDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+            modelBuilder.Entity<Company>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
+
             modelBuilder.Entity<Plant>()
                 .Property(o => o.creationDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
             modelBuilder.Entity<Plant>()
                 .Property(o => o.updateDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<Plant>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
 
             modelBuilder.Entity<Category>()
                 .Property(o => o.status)
@@ -126,12 +170,20 @@ namespace MegaStore.API.Data
                 .Property(o => o.updateDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+            modelBuilder.Entity<Category>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
+
             modelBuilder.Entity<Product>()
                 .Property(o => o.creationDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
             modelBuilder.Entity<Product>()
                 .Property(o => o.updateDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            modelBuilder.Entity<Product>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
 
             modelBuilder.Entity<Color>()
                 .Property(o => o.creationDate)
@@ -185,8 +237,6 @@ namespace MegaStore.API.Data
             modelBuilder.Entity<OrderLine>()
                 .Property(o => o.status)
                 .HasDefaultValue(true);
-
-
         }
 
     }
