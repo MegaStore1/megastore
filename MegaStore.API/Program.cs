@@ -13,6 +13,8 @@ using MegaStore.API.Data.Core.Shared;
 using MegaStore.API.Data.Settings.CompanyRepo;
 using MegaStore.API.Data.ProductRepo;
 using MegaStore.API.Data.OrderRepo;
+using MegaStore.API.Data.CustomerRepo;
+using MegaStore.API.Helpers.Mail;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +49,7 @@ builder.Services.AddScoped<IUserRoles, UserRoles>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
 // Add Seeds
 builder.Services.AddScoped<Seed>();
@@ -63,6 +66,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false
         };
     });
+
+// Mail Settings
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddTransient<IMailService, MailService>();
 
 builder.Services.AddScoped<LogUserActivity>();
 

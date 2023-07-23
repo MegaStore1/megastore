@@ -3,6 +3,7 @@ using System;
 using MegaStore.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MegaStore.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230716010818_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -201,6 +204,7 @@ namespace MegaStore.API.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("fullName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<byte[]>("passwordHash")
@@ -229,46 +233,6 @@ namespace MegaStore.API.Migrations
                     b.HasIndex("companyId");
 
                     b.ToTable("mscCustomer");
-                });
-
-            modelBuilder.Entity("MegaStore.API.Models.Customer.CustomerVerificationCode", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("code")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("creationDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("creationUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("customerId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValue(true);
-
-                    b.Property<DateTime>("updateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("updateUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("customerId");
-
-                    b.ToTable("mscCustomerVerificationCode");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.Order.Order", b =>
@@ -844,17 +808,6 @@ namespace MegaStore.API.Migrations
                     b.Navigation("company");
                 });
 
-            modelBuilder.Entity("MegaStore.API.Models.Customer.CustomerVerificationCode", b =>
-                {
-                    b.HasOne("MegaStore.API.Models.Customer.Customer", "customer")
-                        .WithMany("verificationCodes")
-                        .HasForeignKey("customerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("customer");
-                });
-
             modelBuilder.Entity("MegaStore.API.Models.Order.Order", b =>
                 {
                     b.HasOne("MegaStore.API.Models.Customer.Customer", "customer")
@@ -1032,8 +985,6 @@ namespace MegaStore.API.Migrations
             modelBuilder.Entity("MegaStore.API.Models.Customer.Customer", b =>
                 {
                     b.Navigation("orders");
-
-                    b.Navigation("verificationCodes");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.Order.Order", b =>

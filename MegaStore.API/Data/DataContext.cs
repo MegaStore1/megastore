@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MegaStore.API.Models;
 using MegaStore.API.Models.Core;
 using MegaStore.API.Models.Core.CountryModel;
+using MegaStore.API.Models.Customer;
 using MegaStore.API.Models.Order;
 using MegaStore.API.Models.Product.Inventory;
 using MegaStore.API.Models.Product.Product;
@@ -36,6 +37,8 @@ namespace MegaStore.API.Data
         public DbSet<ProductLine> ProductLines { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderLine> OrderLines { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<CustomerVerificationCode> CustomerVerificationCodes { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -47,10 +50,16 @@ namespace MegaStore.API.Data
             modelBuilder.Entity<User>()
                     .Property(b => b.updateDate)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            // TODO:: Add Unique Constraints to database for user and customer
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasIndex(e => e.Email).IsUnique();
+            });
             modelBuilder.Entity<UserRoles>(userRole =>
             {
                 userRole.HasKey(ur => new { ur.pageId, ur.userId });
             });
+
 
             modelBuilder.Entity<User>()
                 .Property(o => o.status)
@@ -235,6 +244,32 @@ namespace MegaStore.API.Data
                 .Property(o => o.updateDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
             modelBuilder.Entity<OrderLine>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
+
+            // Customer
+            modelBuilder.Entity<Customer>()
+               .Property(o => o.creationDate)
+               .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<Customer>()
+                .Property(o => o.updateDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<Customer>()
+                .Property(o => o.status)
+                .HasDefaultValue(false);
+            modelBuilder.Entity<Customer>(entity =>
+            {
+                entity.HasIndex(e => e.email).IsUnique();
+            });
+
+            // Customer Verification Codes
+            modelBuilder.Entity<CustomerVerificationCode>()
+               .Property(o => o.creationDate)
+               .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<CustomerVerificationCode>()
+                .Property(o => o.updateDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<CustomerVerificationCode>()
                 .Property(o => o.status)
                 .HasDefaultValue(true);
         }
