@@ -60,7 +60,7 @@ namespace MegaStore.API.Controllers.Customer
             MailData mailData = new MailData
             {
                 emailToId = customerForRegisterDto.email,
-                emailToName = customerForRegisterDto.customerName,
+                emailToName = customerForRegisterDto.firstName + " " + customerForRegisterDto.lastName,
                 emailSubject = EMAIL_SUBJECT,
                 emailBody = $"Here is your activation code {verificationCode}"
             };
@@ -70,7 +70,8 @@ namespace MegaStore.API.Controllers.Customer
                 var customerToCreate = new MegaStore.API.Models.Customer.Customer
                 {
                     email = customerForRegisterDto.email,
-                    fullName = customerForRegisterDto.customerName,
+                    firstName = customerForRegisterDto.firstName,
+                    lastName = customerForRegisterDto.lastName,
                     companyId = customerForRegisterDto.companyId
                 };
                 customerToCreate.verificationCodes = new Collection<Models.Customer.CustomerVerificationCode>();
@@ -102,7 +103,7 @@ namespace MegaStore.API.Controllers.Customer
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, customerFromRepo.id.ToString()),
-                new Claim(ClaimTypes.Name, customerFromRepo.fullName),
+                new Claim(ClaimTypes.Name, customerFromRepo.firstName + " " + customerFromRepo.lastName),
                 new Claim(ClaimTypes.Email, customerFromRepo.email),
                 new Claim(ClaimTypes.Sid, customerFromRepo.id.ToString())
             };
@@ -260,6 +261,19 @@ namespace MegaStore.API.Controllers.Customer
             Response.AddPagintaion(orders.currentPage, orders.pageSize, orders.totalCount, orders.totalPages);
 
             return Ok(ordersToReturn);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCustomer(int id)
+        {
+            int customerId = Extensions.GetSessionDetails(this).id;
+            if (customerId != id) return BadRequest();
+
+            var customer = await this.repository.GetCustomer(id);
+
+            var customerToReturn = this.mapper.Map<CustomerForDetailsDto>(customer);
+
+            return Ok(customerToReturn);
         }
     }
 }

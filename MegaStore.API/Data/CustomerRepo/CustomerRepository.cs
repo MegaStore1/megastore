@@ -28,6 +28,7 @@ namespace MegaStore.API.Data.CustomerRepo
         public async Task<Customer> GetCustomer(int id)
         {
             var customer = await this.context.Customers
+            .Include(m => m.company)
             .Include(m => m.orders)
             .ThenInclude(o => o.plant)
             .FirstOrDefaultAsync(x => x.id == id);
@@ -37,8 +38,6 @@ namespace MegaStore.API.Data.CustomerRepo
         public async Task<Customer> GetCustomerByEmail(string email)
         {
             var customer = await this.context.Customers
-            .Include(m => m.orders)
-            .ThenInclude(o => o.plant)
             .FirstOrDefaultAsync(x => x.email == email);
             return customer;
         }

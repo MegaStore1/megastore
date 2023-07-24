@@ -16,5 +16,6 @@ namespace MegaStore.API.Models.Core.CountryModel
         public int countryId { get; set; }
         public Country country { get; set; }
         public ICollection<Plant> plants { get; set; }
+        public ICollection<MegaStore.API.Models.Customer.Customer> customers { get; set; }
     }
 }
