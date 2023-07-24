@@ -14,6 +14,7 @@ namespace MegaStore.API.Mapper.Customer
             CreateMap<CustomerForRegisterDto, MegaStore.API.Models.Customer.Customer>();
             CreateMap<CustomerForLoginDto, MegaStore.API.Models.Customer.Customer>();
             CreateMap<MegaStore.API.Models.Customer.Customer, CustomerForDetailsDto>();
+            CreateMap<CustomerToActivateDto, MegaStore.API.Models.Customer.CustomerVerificationCode>();
         }
     }
 }

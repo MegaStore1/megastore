@@ -50,7 +50,7 @@ namespace MegaStore.API.Data
             modelBuilder.Entity<User>()
                     .Property(b => b.updateDate)
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
-            // TODO:: Add Unique Constraints to database for user and customer
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasIndex(e => e.Email).IsUnique();

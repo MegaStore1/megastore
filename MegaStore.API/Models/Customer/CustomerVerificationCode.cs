@@ -12,7 +12,7 @@ namespace MegaStore.API.Models.Customer
     {
         public int id { get; set; }
         public required int code { get; set; }
-        public required int customerId { get; set; }
-        public required Customer customer { get; set; }
+        public int customerId { get; set; }
+        public Customer customer { get; set; }
     }
 }

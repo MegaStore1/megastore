@@ -28,13 +28,13 @@ namespace MegaStore.API.Helpers.Mail
                     emailMessage.To.Add(emailTo);
 
                     // you can add the CCs and BCCs here.
-                    //emailMessage.Cc.Add(new MailboxAddress("Cc Receiver", "cc@example.com"));
-                    //emailMessage.Bcc.Add(new MailboxAddress("Bcc Receiver", "bcc@example.com"));
+                    //emailMessage.Cc.Add(new MailboxAddress('Cc Receiver', 'cc@example.com'));
+                    //emailMessage.Bcc.Add(new MailboxAddress('Bcc Receiver', 'bcc@example.com'));
 
                     emailMessage.Subject = mailData.emailSubject;
 
                     BodyBuilder emailBodyBuilder = new BodyBuilder();
-                    emailBodyBuilder.HtmlBody = $"<pre>{mailData.emailBody}<pre/>";
+                    emailBodyBuilder.HtmlBody = returnHtmlBody(mailData);
 
                     emailMessage.Body = emailBodyBuilder.ToMessageBody();
                     //this is the SmtpClient from the Mailkit.Net.Smtp namespace, not the System.Net.Mail one
@@ -54,6 +54,12 @@ namespace MegaStore.API.Helpers.Mail
                 Console.WriteLine(ex.Message);
                 return false;
             }
+        }
+
+        private string returnHtmlBody(MailData mailData)
+        {
+            // TODO:: Design an HTML template ad return it with data.
+            return $"<pre>{mailData.emailBody}</pre>";
         }
     }
 }
