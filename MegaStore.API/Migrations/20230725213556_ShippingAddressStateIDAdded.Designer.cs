@@ -3,6 +3,7 @@ using System;
 using MegaStore.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MegaStore.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230725213556_ShippingAddressStateIDAdded")]
+    partial class ShippingAddressStateIDAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -216,7 +219,7 @@ namespace MegaStore.API.Migrations
                         .IsRequired()
                         .HasColumnType("BLOB");
 
-                    b.Property<int?>("stateId")
+                    b.Property<int>("stateId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("status")
@@ -926,7 +929,9 @@ namespace MegaStore.API.Migrations
 
                     b.HasOne("MegaStore.API.Models.Core.CountryModel.State", "state")
                         .WithMany("customers")
-                        .HasForeignKey("stateId");
+                        .HasForeignKey("stateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("company");
 

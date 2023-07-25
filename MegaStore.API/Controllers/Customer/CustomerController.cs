@@ -13,6 +13,7 @@ using MegaStore.API.Dtos.Customer;
 using MegaStore.API.Dtos.Order;
 using MegaStore.API.Helpers;
 using MegaStore.API.Helpers.Mail;
+using MegaStore.API.Models.Customer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -72,7 +73,10 @@ namespace MegaStore.API.Controllers.Customer
                     email = customerForRegisterDto.email,
                     firstName = customerForRegisterDto.firstName,
                     lastName = customerForRegisterDto.lastName,
-                    companyId = customerForRegisterDto.companyId
+                    companyId = customerForRegisterDto.companyId,
+                    passwordHash = new byte[] { },
+                    passwordSalt = new byte[] { }
+
                 };
                 customerToCreate.verificationCodes = new Collection<Models.Customer.CustomerVerificationCode>();
                 customerToCreate.verificationCodes.Add(new Models.Customer.CustomerVerificationCode
@@ -274,6 +278,22 @@ namespace MegaStore.API.Controllers.Customer
             var customerToReturn = this.mapper.Map<CustomerForDetailsDto>(customer);
 
             return Ok(customerToReturn);
+        }
+
+        [HttpPost("add-shipping-address")]
+        public async Task<IActionResult> AddShippingAddress(CustomerShippingAddressForAddDto customerShippingAddressDto)
+        {
+            int id = Extensions.GetSessionDetails(this).id;
+
+            if (id != customerShippingAddressDto.customerId) return BadRequest();
+
+            var addressToCreate = this.mapper.Map<ShippingAddress>(customerShippingAddressDto);
+            addressToCreate.creationUserId = id;
+            addressToCreate.updateUserId = id;
+
+            this.repository.Add<ShippingAddress>(addressToCreate);
+            await this.repository.SaveAll();
+            return NoContent();
         }
     }
 }

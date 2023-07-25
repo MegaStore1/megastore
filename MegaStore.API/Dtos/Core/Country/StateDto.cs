@@ -10,5 +10,6 @@ namespace MegaStore.API.Dtos.Core.Country
         public int id { get; set; }
         public string stateCode { get; set; }
         public string stateName { get; set; }
+        public string countryName { get; set; }
     }
 }

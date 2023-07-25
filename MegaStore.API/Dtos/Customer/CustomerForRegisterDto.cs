@@ -22,5 +22,7 @@ namespace MegaStore.API.Dtos.Customer
         public required string lastName { get; set; }
 
         public int? companyId { get; set; }
+
+        public int? stateId { get; set; }
     }
 }

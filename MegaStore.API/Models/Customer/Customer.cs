@@ -16,13 +16,13 @@ namespace MegaStore.API.Models.Customer
         public required string firstName { get; set; }
         public required string lastName { get; set; }
         public required string email { get; set; }
-        public byte[] passwordHash { get; set; }
-        public byte[] passwordSalt { get; set; }
+        public required byte[] passwordHash { get; set; }
+        public required byte[] passwordSalt { get; set; }
         public int? companyId { get; set; }
         public Company? company { get; set; }
 
-        public int stateId { get; set; }
-        public State state { get; set; }
+        public int? stateId { get; set; }
+        public State? state { get; set; }
         public ShippingAddress shippingAddress { get; set; }
 
         public ICollection<MegaStore.API.Models.Order.Order> orders { get; set; }

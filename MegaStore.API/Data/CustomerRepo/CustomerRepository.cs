@@ -28,9 +28,9 @@ namespace MegaStore.API.Data.CustomerRepo
         public async Task<Customer> GetCustomer(int id)
         {
             var customer = await this.context.Customers
+            .Include(m => m.shippingAddress).ThenInclude(m => m.state).ThenInclude(m => m.country)
             .Include(m => m.company)
-            .Include(m => m.orders)
-            .ThenInclude(o => o.plant)
+            .Include(m => m.orders).ThenInclude(o => o.plant)
             .FirstOrDefaultAsync(x => x.id == id);
             return customer;
         }

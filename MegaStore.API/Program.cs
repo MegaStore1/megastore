@@ -104,7 +104,7 @@ else
     });
 }
 
-Seed.SeedCountries(app);
+// Seed.SeedCountries(app);
 
 // app.UseHttpsRedirection();
 app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());

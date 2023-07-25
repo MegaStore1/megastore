@@ -14,7 +14,11 @@ namespace MegaStore.API.Mapper.Core.CountryMapper
         {
             CreateMap<Country, CountryForListDto>();
             CreateMap<Country, CountryForDetailsDto>();
-            CreateMap<State, StateDto>();
+            CreateMap<State, StateDto>()
+                .ForMember(dest => dest.countryName, opt =>
+                {
+                    opt.MapFrom(src => src.country.countryName);
+                });
         }
     }
 }

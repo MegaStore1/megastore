@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using MegaStore.API.Models.Core;
-using MegaStore.API.Models.Core.CountryModel;
+using MegaStore.API.Dtos.Core.Country;
 
-namespace MegaStore.API.Models.Customer
+namespace MegaStore.API.Dtos.Customer
 {
-    [Table("mscCustomerShippingAddress")]
-    public class ShippingAddress : Base
+    public class ShippingAddressDto
     {
         public int id { get; set; }
         public required string firstName { get; set; }
@@ -17,11 +14,7 @@ namespace MegaStore.API.Models.Customer
         public required string address { get; set; }
         public required string apartmentOrSuite { get; set; }
         public required string city { get; set; }
-        public int stateId { get; set; }
-        public State state { get; set; }
+        public StateDto state { get; set; }
         public required string postalCode { get; set; }
-        public int customerId { get; set; }
-        public Customer customer { get; set; }
-
     }
 }
