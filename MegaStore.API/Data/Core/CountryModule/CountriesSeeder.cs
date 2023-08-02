@@ -19,21 +19,29 @@ namespace MegaStore.API.Data.Core.CountryModule
                 DataContext context = scope.ServiceProvider.GetRequiredService<DataContext>();
                 var countryData = System.IO.File.ReadAllText("Data/Core/CountryModule/countries.json");
                 var countries = JsonConvert.DeserializeObject<List<Country>>(countryData);
+                var countryPhoneCodeData = System.IO.File.ReadAllText("Data/Core/CountryModule/countryphonecodes.json");
+                var countryPhoneCodes = JsonConvert.DeserializeObject<List<CountryPhoneCode>>(countryPhoneCodeData);
 
                 var stateData = System.IO.File.ReadAllText("Data/Core/CountryModule/states.json");
-                var allStates = JsonConvert.DeserializeObject<List<State>>(stateData);
+                List<State>? allStates = JsonConvert.DeserializeObject<List<State>>(stateData);
 
-                foreach (var country in countries)
+                if (null != countries)
                 {
-                    country.updateUserId = 1;
-                    country.creationUserId = 1;
-                    ICollection<State> states = allStates.Where(s => s.countryId == country.id).ToList();
-                    country.States = states;
-
-                    context.Countries.Add(country);
+                    foreach (var country in countries)
+                    {
+                        CountryPhoneCode? phoneCode = countryPhoneCodes?.FirstOrDefault(x => x.code == country.countryCode);
+                        country.countryPhoneCode = (phoneCode == null ? "no code" : phoneCode.dialCode)!;
+                        country.updateUserId = 1;
+                        country.creationUserId = 1;
+                        if (null != allStates)
+                        {
+                            ICollection<State> states = allStates.Where(s => s.countryId == country.id).ToList();
+                            country.States = states;
+                        }
+                        context.Countries.Add(country);
+                    }
+                    context.SaveChanges();
                 }
-
-                context.SaveChanges();
             }
             catch (Exception ex)
             {

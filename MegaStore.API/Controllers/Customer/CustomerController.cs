@@ -295,5 +295,21 @@ namespace MegaStore.API.Controllers.Customer
             await this.repository.SaveAll();
             return NoContent();
         }
+
+        [HttpPost("add-contact")]
+        public async Task<IActionResult> AddContact(CustomerContactDetailDto customerContactDetail)
+        {
+            int id = Extensions.GetSessionDetails(this).id;
+
+            if (id != customerContactDetail.customerId) return BadRequest();
+
+            var contactToCreate = this.mapper.Map<CustomerContactDetail>(customerContactDetail);
+            contactToCreate.creationUserId = id;
+            contactToCreate.updateUserId = id;
+
+            this.repository.Add<CustomerContactDetail>(contactToCreate);
+            await this.repository.SaveAll();
+            return NoContent();
+        }
     }
 }

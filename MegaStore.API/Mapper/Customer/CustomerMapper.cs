@@ -18,6 +18,8 @@ namespace MegaStore.API.Mapper.Customer
             CreateMap<CustomerToActivateDto, MegaStore.API.Models.Customer.CustomerVerificationCode>();
             CreateMap<CustomerShippingAddressForAddDto, ShippingAddress>();
             CreateMap<ShippingAddress, ShippingAddressDto>();
+            CreateMap<CustomerContactDetailDto, CustomerContactDetail>();
+            CreateMap<CustomerContactDetail, CustomerContactDetailForDetailDto>();
         }
     }
 }

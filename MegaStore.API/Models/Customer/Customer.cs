@@ -27,5 +27,7 @@ namespace MegaStore.API.Models.Customer
 
         public ICollection<MegaStore.API.Models.Order.Order> orders { get; set; }
         public ICollection<CustomerVerificationCode> verificationCodes { get; set; }
+
+        public ICollection<CustomerContactDetail> contacts { get; set; }
     }
 }

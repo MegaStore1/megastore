@@ -16,5 +16,6 @@ namespace MegaStore.API.Dtos.Customer
         public ShippingAddressDto? shippingAddress { get; set; }
         public CompanyForListDto? company { get; set; }
         public ICollection<OrderDetailsDto>? orders { get; set; }
+        public ICollection<CustomerContactDetailForDetailDto> contacts { get; set; }
     }
 }

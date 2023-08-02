@@ -41,6 +41,8 @@ namespace MegaStore.API.Data
         public DbSet<CustomerVerificationCode> CustomerVerificationCodes { get; set; }
         public DbSet<ShippingAddress> ShippingAddresses { get; set; }
 
+        public DbSet<CustomerContactDetail> CustomerContactDetails { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -282,6 +284,17 @@ namespace MegaStore.API.Data
                 .Property(o => o.updateDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP");
             modelBuilder.Entity<ShippingAddress>()
+                .Property(o => o.status)
+                .HasDefaultValue(true);
+
+            // Customer ShippingAddress
+            modelBuilder.Entity<CustomerContactDetail>()
+               .Property(o => o.creationDate)
+               .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<CustomerContactDetail>()
+                .Property(o => o.updateDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            modelBuilder.Entity<CustomerContactDetail>()
                 .Property(o => o.status)
                 .HasDefaultValue(true);
         }
