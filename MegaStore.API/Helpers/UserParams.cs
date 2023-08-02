@@ -19,5 +19,6 @@ namespace MegaStore.API.Helpers
         public int UserId { get; set; }
         public string? email { get; set; }
         public string? orderBy { get; set; }
+        public int customerId { get; set; }
     }
 }

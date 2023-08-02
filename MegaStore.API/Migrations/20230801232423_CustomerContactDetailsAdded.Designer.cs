@@ -3,6 +3,7 @@ using System;
 using MegaStore.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MegaStore.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230801232423_CustomerContactDetailsAdded")]
+    partial class CustomerContactDetailsAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -258,9 +261,6 @@ namespace MegaStore.API.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("countryId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("creationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
@@ -270,6 +270,9 @@ namespace MegaStore.API.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("customerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("stateId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("status")
@@ -287,9 +290,9 @@ namespace MegaStore.API.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("countryId");
-
                     b.HasIndex("customerId");
+
+                    b.HasIndex("stateId");
 
                     b.ToTable("mscCustomerContactDetail");
                 });
@@ -985,21 +988,21 @@ namespace MegaStore.API.Migrations
 
             modelBuilder.Entity("MegaStore.API.Models.Customer.CustomerContactDetail", b =>
                 {
-                    b.HasOne("MegaStore.API.Models.Core.CountryModel.Country", "country")
-                        .WithMany()
-                        .HasForeignKey("countryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("MegaStore.API.Models.Customer.Customer", "customer")
                         .WithMany("contacts")
                         .HasForeignKey("customerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("country");
+                    b.HasOne("MegaStore.API.Models.Core.CountryModel.State", "state")
+                        .WithMany()
+                        .HasForeignKey("stateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("customer");
+
+                    b.Navigation("state");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.Customer.CustomerVerificationCode", b =>

@@ -32,8 +32,17 @@ namespace MegaStore.API.Data.OrderRepo
         {
             var orders = this.context.Orders
                 .Include(o => o.plant)
-                .Include(o => o.lines)
-                .AsQueryable().Where(o => o.plantId == plantId);
+                .Include(o => o.lines).AsQueryable();
+
+            if (plantId > 0)
+            {
+                orders = orders.Where(o => o.plantId == plantId);
+            }
+
+            if (userParams.customerId > 0)
+            {
+                orders = orders.Where(x => x.customerId == userParams.customerId);
+            }
 
             return await PagedList<Order>.CreateAsync(orders, userParams.pageNumber, userParams.pageSize);
         }

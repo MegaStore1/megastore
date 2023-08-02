@@ -3,6 +3,7 @@ using System;
 using MegaStore.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MegaStore.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230725213556_ShippingAddressStateIDAdded")]
+    partial class ShippingAddressStateIDAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -28,10 +31,6 @@ namespace MegaStore.API.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("countryName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("countryPhoneCode")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -220,7 +219,7 @@ namespace MegaStore.API.Migrations
                         .IsRequired()
                         .HasColumnType("BLOB");
 
-                    b.Property<int?>("stateId")
+                    b.Property<int>("stateId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("status")
@@ -246,52 +245,6 @@ namespace MegaStore.API.Migrations
                     b.HasIndex("stateId");
 
                     b.ToTable("mscCustomer");
-                });
-
-            modelBuilder.Entity("MegaStore.API.Models.Customer.CustomerContactDetail", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("contact")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("countryId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("creationDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("creationUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("customerId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValue(true);
-
-                    b.Property<DateTime>("updateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("updateUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("countryId");
-
-                    b.HasIndex("customerId");
-
-                    b.ToTable("mscCustomerContactDetail");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.Customer.CustomerVerificationCode", b =>
@@ -976,30 +929,13 @@ namespace MegaStore.API.Migrations
 
                     b.HasOne("MegaStore.API.Models.Core.CountryModel.State", "state")
                         .WithMany("customers")
-                        .HasForeignKey("stateId");
+                        .HasForeignKey("stateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("company");
 
                     b.Navigation("state");
-                });
-
-            modelBuilder.Entity("MegaStore.API.Models.Customer.CustomerContactDetail", b =>
-                {
-                    b.HasOne("MegaStore.API.Models.Core.CountryModel.Country", "country")
-                        .WithMany()
-                        .HasForeignKey("countryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MegaStore.API.Models.Customer.Customer", "customer")
-                        .WithMany("contacts")
-                        .HasForeignKey("customerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("country");
-
-                    b.Navigation("customer");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.Customer.CustomerVerificationCode", b =>
@@ -1210,8 +1146,6 @@ namespace MegaStore.API.Migrations
 
             modelBuilder.Entity("MegaStore.API.Models.Customer.Customer", b =>
                 {
-                    b.Navigation("contacts");
-
                     b.Navigation("orders");
 
                     b.Navigation("shippingAddress")

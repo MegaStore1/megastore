@@ -14,6 +14,7 @@ namespace MegaStore.API.Models.Core.CountryModel
         public String countryName { get; set; }
 
         public String countryCode { get; set; }
+        public required String countryPhoneCode { get; set; }
 
         public ICollection<State>? States { get; set; }
     }

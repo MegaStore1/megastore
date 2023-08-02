@@ -50,7 +50,7 @@ namespace MegaStore.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
-            var userFromRepo = await this.repository.Login(userForLoginDto.Email.ToLower(), userForLoginDto.Password);
+            var userFromRepo = await this.repository.Login(userForLoginDto.email.ToLower(), userForLoginDto.password);
 
             if (userFromRepo == null)
                 return Unauthorized();
