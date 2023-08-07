@@ -71,6 +71,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddTransient<IMailService, MailService>();
 
+// Stripe Infrastructure
+builder.Services.AddStripeInfrastructure(builder.Configuration);
+
 builder.Services.AddScoped<LogUserActivity>();
 
 var app = builder.Build();
