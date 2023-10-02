@@ -3,6 +3,7 @@ using System;
 using MegaStore.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MegaStore.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230922174152_UserExtended")]
+    partial class UserExtended
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
@@ -156,17 +159,10 @@ namespace MegaStore.API.Migrations
                     b.Property<int>("creationUserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("isPublic")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("moduleId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("pageName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("path")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -854,6 +850,7 @@ namespace MegaStore.API.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("line2")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<long>("lng")
@@ -868,10 +865,6 @@ namespace MegaStore.API.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("postalCode")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("registrationNumber")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -958,6 +951,10 @@ namespace MegaStore.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("BLOB");
@@ -965,6 +962,10 @@ namespace MegaStore.API.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .IsRequired()
                         .HasColumnType("BLOB");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("creationDate")
                         .ValueGeneratedOnAdd()
@@ -974,36 +975,10 @@ namespace MegaStore.API.Migrations
                     b.Property<int>("creationUserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("firstName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("lastName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("line1")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("line2")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("plantId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("postalCode")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("role")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("stateId")
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("status")
@@ -1021,12 +996,10 @@ namespace MegaStore.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("email")
+                    b.HasIndex("Email")
                         .IsUnique();
 
                     b.HasIndex("plantId");
-
-                    b.HasIndex("stateId");
 
                     b.ToTable("msuUser");
                 });
@@ -1273,15 +1246,7 @@ namespace MegaStore.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MegaStore.API.Models.Core.CountryModel.State", "state")
-                        .WithMany()
-                        .HasForeignKey("stateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("plant");
-
-                    b.Navigation("state");
                 });
 
             modelBuilder.Entity("MegaStore.API.Models.Core.CountryModel.Country", b =>

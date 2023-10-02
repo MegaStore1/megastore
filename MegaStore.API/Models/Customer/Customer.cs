@@ -18,8 +18,8 @@ namespace MegaStore.API.Models.Customer
         public required string email { get; set; }
         public required byte[] passwordHash { get; set; }
         public required byte[] passwordSalt { get; set; }
-        public int? companyId { get; set; }
-        public Company? company { get; set; }
+        public int? plantId { get; set; }
+        public Plant? plant { get; set; }
 
         public int? stateId { get; set; }
         public State? state { get; set; }
@@ -29,5 +29,6 @@ namespace MegaStore.API.Models.Customer
         public ICollection<CustomerVerificationCode> verificationCodes { get; set; }
 
         public ICollection<CustomerContactDetail> contacts { get; set; }
+        public required string stripeId { get; set; }
     }
 }

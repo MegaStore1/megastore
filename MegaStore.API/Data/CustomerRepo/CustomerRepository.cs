@@ -29,7 +29,7 @@ namespace MegaStore.API.Data.CustomerRepo
         {
             var customer = await this.context.Customers
             .Include(m => m.shippingAddress).ThenInclude(m => m.state).ThenInclude(m => m.country)
-            .Include(m => m.company)
+            .Include(m => m.plant)
             .Include(m => m.orders).ThenInclude(o => o.plant)
             .Include(m => m.contacts)
             .ThenInclude(m => m.country)
@@ -55,7 +55,7 @@ namespace MegaStore.API.Data.CustomerRepo
         public async Task<Customer> Login(string email, string password)
         {
             var customer = await this.context.Customers
-                .Include(o => o.company)
+                .Include(o => o.plant)
                 .FirstOrDefaultAsync(x => x.email == email);
 
             if (null == customer) return null;

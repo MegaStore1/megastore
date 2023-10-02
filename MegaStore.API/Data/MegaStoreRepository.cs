@@ -29,7 +29,13 @@ namespace MegaStore.API.Data
 
         public async Task<User> GetUser(int id)
         {
-            var user = await this.context.Users.Include(p => p.Photos).Include(ur => ur.pages).ThenInclude(urm => urm.module).FirstOrDefaultAsync(u => u.Id == id);
+            var user = await this.context.Users
+            .Include(p => p.plant)
+            .Include(p => p.Photos)
+            .Include(s => s.state)
+            .Include(ur => ur.pages)
+            .ThenInclude(urm => urm.module)
+            .FirstOrDefaultAsync(u => u.Id == id);
 
             return user;
         }
@@ -39,14 +45,17 @@ namespace MegaStore.API.Data
             var users = this.context.Users.Include(p => p.Photos).OrderByDescending(u => u.Id).AsQueryable();
 
             if (!string.IsNullOrEmpty(userParams.email))
-                users = users.Where(u => u.Email == userParams.email);
+                users = users.Where(u => u.email == userParams.email);
 
             if (!string.IsNullOrEmpty(userParams.orderBy))
             {
                 switch (userParams.orderBy)
                 {
                     case "username":
-                        users = users.OrderBy(u => u.Username);
+                        users = users.OrderBy(u => u.firstName);
+                        break;
+                    case "":
+                        users = users.OrderByDescending(u => u.firstName);
                         break;
                     default:
                         users = users.OrderByDescending(u => u.Id);

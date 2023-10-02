@@ -28,5 +28,18 @@ namespace MegaStore.API.Models.Settings.Company
         public ICollection<User> Users { get; set; }
 
         public ICollection<Color> colors { get; set; }
+        public required string stripeId { get; set; }
+        public required string industry { get; set; }
+        public required string website { get; set; }
+        public required string line1 { get; set; }
+        public string? line2 { get; set; }
+        public required string postalCode { get; set; }
+        public required string phoneNumber { get; set; }
+        public required string taxId { get; set; }
+        public required string city { get; set; }
+        public required string accountNumber { get; set; }
+        public required string routingNumber { get; set; }
+        public required string currency { get; set; }
+        public required string registrationNumber { get; set; }
     }
 }

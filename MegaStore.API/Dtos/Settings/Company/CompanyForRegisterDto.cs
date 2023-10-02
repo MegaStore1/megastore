@@ -11,6 +11,6 @@ namespace MegaStore.API.Dtos.Settings.Company
         [Required]
         public string companyName { get; set; }
         [MinLength(1, ErrorMessage = "Please provide a plant")]
-        public ICollection<PlantForRegisterDto> plants { get; set; }
+        public ICollection<SinglePlantForRegisterDto> plants { get; set; }
     }
 }
