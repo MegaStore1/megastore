@@ -38,7 +38,7 @@ namespace MegaStore.API.Data.Settings.CompanyRepo
 
         public async Task<Plant> GetPlant(int id)
         {
-            var plant = await this.context.Plants.FirstOrDefaultAsync(p => p.id == id);
+            var plant = await this.context.Plants.Include(o => o.company).FirstOrDefaultAsync(p => p.id == id);
             return plant;
         }
     }

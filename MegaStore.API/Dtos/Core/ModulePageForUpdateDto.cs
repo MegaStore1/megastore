@@ -12,6 +12,12 @@ namespace MegaStore.API.Dtos.Core
         [Range(1, Int32.MaxValue)]
         public int moduleId { get; set; }
         [Required]
-        public string pageName { get; set; }
+        public required string pageName { get; set; }
+
+        [Required]
+        public required string path { get; set; }
+
+        [Required]
+        public required bool isPublic { get; set; }
     }
 }

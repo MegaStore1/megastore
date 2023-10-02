@@ -56,7 +56,7 @@ namespace MegaStore.API.Data
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasIndex(e => e.Email).IsUnique();
+                entity.HasIndex(e => e.email).IsUnique();
             });
             modelBuilder.Entity<UserRoles>(userRole =>
             {

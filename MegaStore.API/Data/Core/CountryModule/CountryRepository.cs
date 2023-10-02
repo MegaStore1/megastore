@@ -30,7 +30,7 @@ namespace MegaStore.API.Data.Core.CountryModule
 
         public async Task<State> GetState(int id)
         {
-            var state = await this.context.States.FirstOrDefaultAsync(s => s.id == id);
+            var state = await this.context.States.Include(c => c.country).FirstOrDefaultAsync(s => s.id == id);
             return state;
         }
     }

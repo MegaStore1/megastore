@@ -15,6 +15,7 @@ using MegaStore.API.Data.ProductRepo;
 using MegaStore.API.Data.OrderRepo;
 using MegaStore.API.Data.CustomerRepo;
 using MegaStore.API.Helpers.Mail;
+using MegaStore.API.Services.Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,12 +75,33 @@ builder.Services.AddTransient<IMailService, MailService>();
 // Stripe Infrastructure
 builder.Services.AddStripeInfrastructure(builder.Configuration);
 
+// Custom Page Authorizer
+builder.Services.AddScoped<PageAuthorizer>();
+
 builder.Services.AddScoped<LogUserActivity>();
 
 var app = builder.Build();
 
 // Get Seeds
 
+
+// Run Custom Page Authorizer
+app.Use(async (context, next) =>
+    {
+        var customAuthorizer = context.RequestServices.GetRequiredService<PageAuthorizer>();
+
+        if (await customAuthorizer.IsAuthorized(context))
+        {
+            // User has access to the current API address, proceed with the request
+            await next();
+        }
+        else
+        {
+            // User doesn't have access, return a 403 Forbidden response
+            context.Response.StatusCode = 403;
+            await context.Response.WriteAsync("You don't have permission to access this resource.");
+        }
+    });
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -20,7 +20,7 @@ namespace MegaStore.API.Data
 
         public async Task<User> Login(string email, string password)
         {
-            var user = await this.context.Users.Include(p => p.Photos).Include(o => o.plant).FirstOrDefaultAsync(x => x.Email == email);
+            var user = await this.context.Users.Include(p => p.Photos).Include(o => o.plant).FirstOrDefaultAsync(x => x.email == email);
 
             if (null == user) return null;
 
@@ -44,7 +44,7 @@ namespace MegaStore.API.Data
 
         public async Task<bool> UserExists(string email)
         {
-            if (await this.context.Users.AnyAsync(x => x.Email == email))
+            if (await this.context.Users.AnyAsync(x => x.email == email))
                 return true;
             return false;
         }

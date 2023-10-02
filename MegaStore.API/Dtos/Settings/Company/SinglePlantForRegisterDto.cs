@@ -26,5 +26,38 @@ namespace MegaStore.API.Dtos.Settings.Company
 
         [Required]
         public bool status { get; set; }
+
+        [Required]
+        public required string industry { get; set; }
+
+        [Required]
+        public required string website { get; set; }
+
+        [Required]
+        public required string phoneNumber { get; set; }
+
+        [Required]
+        public required string taxId { get; set; }
+
+        [Required]
+        public required string line1 { get; set; }
+
+        [Required]
+        public required string city { get; set; }
+
+        [Required]
+        public required string postalCode { get; set; }
+
+
+        [Required]
+        public required string accountNumber { get; set; }
+
+        [Required]
+        public required string routingNumber { get; set; }
+
+        [Required]
+        public required string currency { get; set; }
+        [Required]
+        public required string registrationNumber { get; set; }
     }
 }

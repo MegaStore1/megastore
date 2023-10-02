@@ -10,9 +10,11 @@ namespace MegaStore.API.Models.Core
     public class ModulePage : Base
     {
         public int id { get; set; }
-        public string pageName { get; set; }
+        public required string pageName { get; set; }
         public int moduleId { get; set; }
         public Module module { get; set; }
+        public bool isPublic { get; set; }
+        public required string path { get; set; }
         public ICollection<User> users { get; set; }
     }
 }

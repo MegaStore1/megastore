@@ -9,14 +9,17 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MegaStore.API.Data.CustomerRepo;
 using MegaStore.API.Data.OrderRepo;
+using MegaStore.API.Data.Settings.CompanyRepo;
 using MegaStore.API.Dtos.Customer;
 using MegaStore.API.Dtos.Order;
 using MegaStore.API.Helpers;
 using MegaStore.API.Helpers.Mail;
 using MegaStore.API.Models.Customer;
+using MegaStore.API.Services.Stripe;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Stripe;
 
 namespace MegaStore.API.Controllers.Customer
 {
@@ -31,65 +34,120 @@ namespace MegaStore.API.Controllers.Customer
         private readonly IMailService mailService;
 
         private readonly IOrderRepository orderRepository;
+        private readonly IStripeService stripeService;
+        private readonly ICompanyRepository companyRepository;
 
         private readonly string EMAIL_SUBJECT = "Activation Code";
+        private readonly int DEFAULT_PLANT_ID = 1;
+        private readonly string DEFAULT_COMPANY_NAME = "MegaStore";
 
         public CustomerController(
             ICustomerRepository repository,
             IConfiguration configuration,
             IMapper mapper,
             IMailService mailService,
-            IOrderRepository orderRepository)
+            IOrderRepository orderRepository,
+            ICompanyRepository companyRepository,
+            IStripeService stripeService)
         {
             this.repository = repository;
             this.configuration = configuration;
             this.mapper = mapper;
             this.mailService = mailService;
             this.orderRepository = orderRepository;
+            this.stripeService = stripeService;
+            this.companyRepository = companyRepository;
         }
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<IActionResult> Register(CustomerForRegisterDto customerForRegisterDto)
+        public async Task<IActionResult> Register(CustomerForRegisterDto customerForRegisterDto, CancellationToken cancellationToken)
         {
 
             customerForRegisterDto.email = customerForRegisterDto.email.ToLower();
             if (await this.repository.CustomerExists(customerForRegisterDto.email))
                 return BadRequest("email already Exists");
+            // 1 represents the megastore main plant.
+            int plantId = (int)(customerForRegisterDto.plantId == null ? DEFAULT_PLANT_ID : customerForRegisterDto.plantId);
+            var plant = await this.companyRepository.GetPlant(plantId);
 
-            int verificationCode = Extensions.GenerateRandomCode();
+            if (plant == null) return BadRequest($"No plant with {plantId} available.");
 
-            MailData mailData = new MailData
+            string plantStripeId = plant.stripeId;
+
+            var requestOptions = new RequestOptions();
+            var cardRequestOptions = new RequestOptions();
+            if (plant.company.companyName == DEFAULT_COMPANY_NAME)
             {
-                emailToId = customerForRegisterDto.email,
-                emailToName = customerForRegisterDto.firstName + " " + customerForRegisterDto.lastName,
-                emailSubject = EMAIL_SUBJECT,
-                emailBody = $"Here is your activation code {verificationCode}"
-            };
-
-            if (await mailService.sendMail(mailData))
-            {
-                var customerToCreate = new MegaStore.API.Models.Customer.Customer
-                {
-                    email = customerForRegisterDto.email,
-                    firstName = customerForRegisterDto.firstName,
-                    lastName = customerForRegisterDto.lastName,
-                    companyId = customerForRegisterDto.companyId,
-                    passwordHash = new byte[] { },
-                    passwordSalt = new byte[] { }
-
-                };
-                customerToCreate.verificationCodes = new Collection<Models.Customer.CustomerVerificationCode>();
-                customerToCreate.verificationCodes.Add(new Models.Customer.CustomerVerificationCode
-                {
-                    code = verificationCode
-                });
-
-                var createdCustomer = await this.repository.Register(customerToCreate, customerForRegisterDto.password);
-                return StatusCode(201);
+                requestOptions = null;
+                cardRequestOptions = null;
             }
             else
             {
-                return BadRequest("Sending email failed, please try again");
+                requestOptions.StripeAccount = plantStripeId;
+                cardRequestOptions.StripeAccount = plantStripeId;
+            }
+            AddStripeCustomer stripeCustomer = new AddStripeCustomer()
+            {
+                email = customerForRegisterDto.email,
+                name = customerForRegisterDto.firstName + " " + customerForRegisterDto.lastName,
+            };
+
+            StripeCustomer stripeCreatedCustomer = await this.stripeService.AddStripeCustomerAsync(requestOptions,
+                stripeCustomer,
+                cancellationToken);
+
+            if (stripeCreatedCustomer != null)
+            {
+
+                // Register a card for the customer
+                // Add a card to the customer
+                var cardOptions = new CardCreateOptions
+                {
+                    Source = "tok_visa", // Stripe test card token; replace with actual card details
+                };
+                var cardService = new CardService();
+                Card card = cardService.Create(stripeCreatedCustomer.customerId, cardOptions, cardRequestOptions);
+
+                int verificationCode = Extensions.GenerateRandomCode();
+
+                MailData mailData = new MailData
+                {
+                    emailToId = customerForRegisterDto.email,
+                    emailToName = customerForRegisterDto.firstName + " " + customerForRegisterDto.lastName,
+                    emailSubject = EMAIL_SUBJECT,
+                    emailBody = $"Here is your activation code {verificationCode}"
+                };
+
+                if (await mailService.sendMail(mailData))
+                {
+                    var customerToCreate = new MegaStore.API.Models.Customer.Customer
+                    {
+                        email = customerForRegisterDto.email,
+                        firstName = customerForRegisterDto.firstName,
+                        lastName = customerForRegisterDto.lastName,
+                        plantId = customerForRegisterDto.plantId,
+                        passwordHash = new byte[] { },
+                        passwordSalt = new byte[] { },
+                        stripeId = stripeCreatedCustomer.customerId,
+
+                    };
+                    customerToCreate.verificationCodes = new Collection<Models.Customer.CustomerVerificationCode>();
+                    customerToCreate.verificationCodes.Add(new Models.Customer.CustomerVerificationCode
+                    {
+                        code = verificationCode
+                    });
+
+                    var createdCustomer = await this.repository.Register(customerToCreate, customerForRegisterDto.password);
+                    return StatusCode(201);
+                }
+                else
+                {
+                    return BadRequest("Sending email failed, please try again");
+                }
+            }
+            else
+            {
+                return BadRequest("Failed to create payment account");
             }
 
 
